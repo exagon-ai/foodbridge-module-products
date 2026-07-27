@@ -1,0 +1,14 @@
+{
+  "package": "@foodbridge-modules-products/ssot",
+  "version": "1.0.0",
+  "note": "Aggregate package version is the rollup; per-artifact versions below are the source of truth. See SPEC §5.5. History is in CHANGELOG.md.",
+  "artifacts": {
+    "01-state-machine": { "version": "v0", "mutability": "versioned", "status": "draft" },
+    "02-domain-model": { "version": "v0", "mutability": "frozen", "status": "draft" },
+    "03-ux-component-library": { "version": "v0", "mutability": "versioned", "status": "draft" },
+    "04-frontend-domain-model": { "version": "v0", "mutability": "versioned", "status": "draft" },
+    "05-workflow-model": { "version": "v0", "mutability": "versioned", "status": "draft" },
+    "06-test-bed-schema": { "version": "v0", "mutability": "versioned", "status": "draft" },
+    "07-collaboration-contract": { "version": "v0", "mutability": "versioned-semver", "status": "private" }
+  }
+}

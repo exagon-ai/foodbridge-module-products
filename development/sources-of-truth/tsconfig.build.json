@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "index.ts",
+    "01-state-machine/state-machine.v0.xstate.ts",
+    "02-domain-model/domain-model.v0.types.ts",
+    "04-frontend-domain-model/frontend-domain-model.v0.types.ts"
+  ]
+}

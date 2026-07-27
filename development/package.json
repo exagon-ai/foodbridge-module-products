@@ -1,0 +1,16 @@
+{
+  "name": "@foodbridge-modules-products/development",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Workspace root for the Foodbridge Modules Products module's development phase. Links the SSOT package, frontend, and backend so one install builds and wires them all. Each half remains independently installable/portable (SPEC §7.1) via its own package.json.",
+  "workspaces": [
+    "sources-of-truth",
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "build:ssot": "npm run build -w @foodbridge-modules-products/ssot",
+    "postinstall": "npm run build:ssot",
+    "test": "npm run test -w @modules/foodbridge-modules-products-frontend && npm run test -w @modules/foodbridge-modules-products-backend"
+  }
+}

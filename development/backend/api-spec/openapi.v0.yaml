@@ -1,0 +1,73 @@
+# API Spec — Foodbridge Modules Products — v0
+# Derived from: development/sources-of-truth/01-state-machine + 02-domain-model + 05-workflow-model
+# This is the contract. api-client/ and src/api/ are both generated/derived from this file.
+
+openapi: 3.0.3
+info:
+  title: "Foodbridge Modules Products API"
+  version: "0.1.0"
+paths:
+  /entities:
+    get:
+      summary: List EntityName records
+      operationId: listEntities
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EntityName"
+    post:
+      summary: Create an EntityName record
+      operationId: createEntity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EntityNameInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityName"
+  /entities/{id}:
+    get:
+      summary: Get a single EntityName record
+      operationId: getEntity
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EntityName"
+        "404":
+          description: Not found
+components:
+  schemas:
+    EntityName:
+      type: object
+      required: [id, field]
+      properties:
+        id:
+          type: string
+        field:
+          type: string
+    EntityNameInput:
+      type: object
+      required: [field]
+      properties:
+        field:
+          type: string

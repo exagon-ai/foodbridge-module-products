@@ -1,0 +1,144 @@
+{
+  "_comment": "Fake but representative data used only in discovery role-play. Never imported by development/. Rows 1-12 are transcribed from the As-is screenshot (see instructions/inputs/ProductModuleItteration/As-is); rows 13-14 are added edge cases (long name, high stock). Addendum 003 added: description, images[], hsnSac, barcode, brand, coverage, and the unit{} pricing/conversion shape (Smallest Unit / Base Unit / GST / per-unit selling price) that drives the Unit & Price sub-modal and the Product Detail Packaging & Units table.",
+  "store": {
+    "name": "RAJ BAKERY",
+    "user": { "name": "Wholesaler Admin", "role": "Admin" }
+  },
+  "categories": ["Test", "Jjkjk", "Test-00001", "Sandwich", "Lemon", "Bakery"],
+  "stockUnits": ["Box", "Packet", "Crate", "Kg", "Piece"],
+  "smallestUnits": ["Loaf", "Matka", "Pc", "Pcs", "Packet", "Jaar", "Kg", "Ltr"],
+  "baseUnits": ["Pack", "Jar", "Box", "Gunny Bag", "Can", "Carton", "Dozen"],
+  "gstRates": [0, 5, 12, 18, 28],
+  "coverageOptions": [
+    { "value": "none", "label": "No Coverage" },
+    { "value": "warranty", "label": "Warranty Coverage" },
+    { "value": "guarantee", "label": "Guarantee Coverage" }
+  ],
+  "taxModes": [
+    { "value": "excl", "label": "% excl. tax" },
+    { "value": "incl", "label": "% incl. tax" },
+    { "value": "none", "label": "0% tax" }
+  ],
+  "products": [
+    {
+      "id": "p-01", "name": "Jamun-11", "artNo": "SadWss", "category": "Test",
+      "price": 1000.00, "tax": { "mode": "excl", "percent": 18 },
+      "stock": { "qty": 192, "unit": "Box", "canSell": 186, "inOrders": 5 },
+      "image": { "kind": "icon" }, "images": [{ "kind": "icon" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 24, "gst": { "rate": 18, "treatment": "separate" }, "priceSmallest": 1000.00, "priceBase": 24000.00 }
+    },
+    {
+      "id": "p-02", "name": "Tax Products", "artNo": "uQcIcd", "category": "Test",
+      "price": 95.24, "tax": { "mode": "excl", "percent": 5 },
+      "stock": { "qty": 84, "unit": "Box", "canSell": 39, "inOrders": 45 },
+      "image": { "kind": "icon" }, "images": [{ "kind": "icon" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 12, "gst": { "rate": 5, "treatment": "separate" }, "priceSmallest": 95.24, "priceBase": 1142.88 }
+    },
+    {
+      "id": "p-03", "name": "Img Test", "artNo": "i1R3DM", "category": "Test",
+      "price": 10.00, "tax": { "mode": "none", "percent": 0 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 10, "gst": { "rate": 0, "treatment": "included" }, "priceSmallest": 10.00, "priceBase": 100.00 }
+    },
+    {
+      "id": "p-04", "name": "Test100001", "artNo": "CqnXHL", "category": "Test",
+      "price": 200.00, "tax": { "mode": "none", "percent": 0 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "icon" }, "images": [{ "kind": "icon" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 10, "gst": { "rate": 0, "treatment": "included" }, "priceSmallest": 200.00, "priceBase": 2000.00 }
+    },
+    {
+      "id": "p-05", "name": "Product-002", "artNo": "jkpt0Q", "category": "Jjkjk",
+      "price": 196.43, "tax": { "mode": "excl", "percent": 12 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 12, "gst": { "rate": 12, "treatment": "separate" }, "priceSmallest": 196.43, "priceBase": 2357.16 }
+    },
+    {
+      "id": "p-06", "name": "Kdansari", "artNo": "6O3pqV", "category": "Test-00001",
+      "price": 99.11, "tax": { "mode": "excl", "percent": 12 },
+      "stock": { "qty": 0, "unit": "Packet", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Packet", "base": "Carton", "unitsPerBase": 20, "gst": { "rate": 12, "treatment": "separate" }, "priceSmallest": 99.11, "priceBase": 1982.20 }
+    },
+    {
+      "id": "p-07", "name": "Stocks", "artNo": "Nlj7U9", "category": "Test-00001",
+      "price": 100.00, "tax": { "mode": "none", "percent": 0 },
+      "stock": { "qty": 200, "unit": "Box", "canSell": 200, "inOrders": 0 },
+      "image": { "kind": "text", "label": "Raw Mate" }, "images": [{ "kind": "text", "label": "Raw Mate" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 10, "gst": { "rate": 0, "treatment": "included" }, "priceSmallest": 100.00, "priceBase": 1000.00 }
+    },
+    {
+      "id": "p-08", "name": "Mango-1100", "artNo": "cVMzuV", "category": "Sandwich",
+      "price": 10.00, "tax": { "mode": "none", "percent": 0 },
+      "stock": { "qty": 1100, "unit": "Crate", "canSell": 1100, "inOrders": 0 },
+      "image": { "kind": "photo", "emoji": "🥭" }, "images": [{ "kind": "photo", "emoji": "🥭" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Crate", "unitsPerBase": 30, "gst": { "rate": 0, "treatment": "included" }, "priceSmallest": 10.00, "priceBase": 300.00 }
+    },
+    {
+      "id": "p-09", "name": "Product-1", "artNo": "luMiMq", "category": "Sandwich",
+      "price": 120.00, "tax": { "mode": "none", "percent": 0 },
+      "stock": { "qty": 99, "unit": "Box", "canSell": 89, "inOrders": 10 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 12, "gst": { "rate": 0, "treatment": "included" }, "priceSmallest": 120.00, "priceBase": 1440.00 }
+    },
+    {
+      "id": "p-10", "name": "Lemon-12", "artNo": "AR3jXb", "category": "Lemon",
+      "price": 200.00, "tax": { "mode": "incl", "percent": 12 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 12, "gst": { "rate": 12, "treatment": "included" }, "priceSmallest": 200.00, "priceBase": 2400.00 }
+    },
+    {
+      "id": "p-11", "name": "Sweet Corn", "artNo": "m0vMm3", "category": "Test",
+      "price": 95.24, "tax": { "mode": "excl", "percent": 5 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 12, "gst": { "rate": 5, "treatment": "separate" }, "priceSmallest": 95.24, "priceBase": 1142.88 }
+    },
+    {
+      "id": "p-12", "name": "Gst Test", "artNo": "gStTst", "category": "Test",
+      "price": 100.00, "tax": { "mode": "excl", "percent": 18 },
+      "stock": { "qty": 0, "unit": "Box", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "lock" }, "images": [{ "kind": "lock" }],
+      "description": "", "hsnSac": "", "barcode": "", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pc", "base": "Box", "unitsPerBase": 10, "gst": { "rate": 18, "treatment": "separate" }, "priceSmallest": 100.00, "priceBase": 1000.00 }
+    },
+    {
+      "id": "p-13", "name": "Whole Wheat Sandwich Bread — Family Pack", "artNo": "wWsFbP", "category": "Bakery",
+      "price": 65.50, "tax": { "mode": "excl", "percent": 5 },
+      "stock": { "qty": 340, "unit": "Piece", "canSell": 300, "inOrders": 40 },
+      "image": { "kind": "photo", "emoji": "🍞" }, "images": [{ "kind": "photo", "emoji": "🍞" }],
+      "description": "Soft whole-wheat sandwich loaf, family-size pack.", "hsnSac": "1905", "barcode": "8901234567890", "brand": "Raj Bakery", "coverage": "none",
+      "unit": { "smallest": "Pcs", "base": "Box", "unitsPerBase": 20, "gst": { "rate": 5, "treatment": "included" }, "priceSmallest": 65.50, "priceBase": 1310.00 }
+    },
+    {
+      "id": "p-14", "name": "Lemon Cake Slice", "artNo": "lmnCkS", "category": "Lemon",
+      "price": 45.00, "tax": { "mode": "incl", "percent": 5 },
+      "stock": { "qty": 12, "unit": "Kg", "canSell": 2, "inOrders": 10 },
+      "image": { "kind": "photo", "emoji": "🍋" }, "images": [{ "kind": "photo", "emoji": "🍋" }],
+      "description": "Tangy lemon cake, sliced.", "hsnSac": "1905", "barcode": "8909876543210", "brand": "Raj Bakery", "coverage": "warranty",
+      "unit": { "smallest": "Pc", "base": "Kg", "unitsPerBase": 8, "gst": { "rate": 5, "treatment": "included" }, "priceSmallest": 45.00, "priceBase": 360.00 }
+    },
+    {
+      "id": "p-15", "name": "Milk Bread 200gm", "artNo": "a103", "category": "Bakery",
+      "price": 15.75, "tax": { "mode": "incl", "percent": 5 },
+      "stock": { "qty": 0, "unit": "Pcs", "canSell": 0, "inOrders": 0 },
+      "image": { "kind": "photo", "emoji": "🍮" }, "images": [{ "kind": "photo", "emoji": "🍮" }],
+      "description": "", "hsnSac": "", "barcode": "8541247854", "brand": "", "coverage": "none",
+      "unit": { "smallest": "Pcs", "base": "Box", "unitsPerBase": 20, "gst": { "rate": 5, "treatment": "included" }, "priceSmallest": 15.75, "priceBase": 315.00, "pallet": { "label": "Pallet", "perBase": 1, "price": 315.00 } }
+    }
+  ]
+}

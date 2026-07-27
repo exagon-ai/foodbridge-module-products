@@ -1,0 +1,40 @@
+{
+  "name": "@foodbridge-modules-products/ssot",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Sources of Truth for the Foodbridge Modules Products module — the authoritative, versioned artifacts all frontend/backend code derives from (AMDS SPEC §5). Packaged so consumers pin a version instead of reaching across the filesystem (SPEC §5.5).",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./state-machine": {
+      "types": "./dist/01-state-machine/state-machine.v0.xstate.d.ts",
+      "import": "./dist/01-state-machine/state-machine.v0.xstate.js"
+    },
+    "./domain-model": {
+      "types": "./dist/02-domain-model/domain-model.v0.types.d.ts",
+      "import": "./dist/02-domain-model/domain-model.v0.types.js"
+    },
+    "./frontend-domain-model": {
+      "types": "./dist/04-frontend-domain-model/frontend-domain-model.v0.types.d.ts",
+      "import": "./dist/04-frontend-domain-model/frontend-domain-model.v0.types.js"
+    },
+    "./manifest": "./ssot.manifest.json"
+  },
+  "files": [
+    "dist",
+    "ssot.manifest.json"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "xstate": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

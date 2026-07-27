@@ -1,0 +1,213 @@
+<!doctype html>
+<!--
+  DISCOVERY WIRING — Foodbridge Modules Products
+  ---------------------------------------------------------
+  This file is the WIRING only — the hub + transition map. It holds NO screen
+  content; screens live in screens/. The transition map below is the proto-FSM
+  that SSOT-1 (state-machine) and SSOT-5 (workflow) are later derived from.
+  Landing-page visual treatment (canonical card, screen cards) modelled after the
+  sibling Recipe Module's discovery hub, per human request — same green/badge
+  language as the rest of this module's screens (shared.css tokens), not a new
+  palette. Purely cosmetic: no change to screens, routing, or the responsive
+  (not separate-build) mobile decision (Addendum 003 D7).
+  Rules:
+  - HTML/CSS/vanilla JS only. No frameworks, no build step, no real API calls.
+  - Screens are standalone-openable and link to each other; this hub is the entry.
+  - Use seed-data/seed.json for any data.
+  - Disposable. When a version is accepted, snapshot the whole folder
+    (screens/ + index.html + seed-data) into versions/vN/.
+  - Nothing here is imported by development/. It only informs the SSOTs.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foodbridge Modules Products — Discovery Prototype</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --green: #1a9d5b;
+      --green-dark: #128049;
+      --green-tint: #eafaf2;
+      --ink: #1f2430;
+      --muted: #6b7280;
+      --line: #e6e8eb;
+      --bg: #f6f7f9;
+      --card: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      margin: 0; padding: 2.5rem 1.5rem 4rem; color: var(--ink); background: var(--bg);
+    }
+    .wrap { max-width: 860px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; margin: 0 0 0.6rem; }
+    h2 { font-size: 1.05rem; margin: 2.25rem 0 1rem; }
+    .lede { color: var(--muted); font-size: 0.95rem; line-height: 1.55; max-width: 680px; }
+    .note { color: var(--muted); font-size: 0.85rem; }
+    a { color: var(--green-dark); }
+    code { background: #eef1f4; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.85em; }
+
+    /* ---- canonical card ---- */
+    .canonical-card {
+      background: var(--green-tint); border: 1.5px solid var(--green); border-radius: 14px;
+      padding: 1.5rem 1.75rem; margin-top: 1.75rem;
+    }
+    .badge {
+      display: inline-block; background: var(--green); color: #fff; font-size: 0.7rem;
+      font-weight: 700; letter-spacing: 0.03em; padding: 0.25rem 0.65rem; border-radius: 999px;
+      margin-bottom: 0.75rem; text-transform: uppercase;
+    }
+    .canonical-card h3 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    .canonical-card p { color: #33403a; font-size: 0.9rem; line-height: 1.6; margin: 0 0 1.25rem; max-width: 640px; }
+    .btn-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.6rem 1.1rem;
+      border-radius: 8px; font-size: 0.88rem; font-weight: 700; text-decoration: none;
+      border: 1.5px solid var(--green); cursor: pointer;
+    }
+    .btn-primary { background: var(--green); color: #fff; }
+    .btn-primary:hover { background: var(--green-dark); border-color: var(--green-dark); }
+    .btn-secondary { background: #fff; color: var(--green-dark); }
+    .btn-secondary:hover { background: var(--green-tint); }
+
+    /* ---- screen cards grid ---- */
+    .screen-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem;
+    }
+    .screen-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+      padding: 1.1rem 1.2rem; text-decoration: none; color: var(--ink); display: block;
+    }
+    .screen-card:hover { border-color: var(--green); box-shadow: 0 4px 14px rgba(26, 157, 91, 0.12); }
+    .screen-card .step-badge {
+      display: inline-block; background: #eef1f4; color: var(--muted); font-size: 0.68rem;
+      font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; margin-bottom: 0.6rem;
+    }
+    .screen-card h4 { margin: 0 0 0.4rem; font-size: 0.98rem; }
+    .screen-card p { margin: 0; font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+
+    /* ---- reference / inputs section ---- */
+    .ref-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .ref-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+      padding: 1rem 1.2rem; flex: 1; min-width: 240px; font-size: 0.85rem;
+    }
+    .ref-card .step-badge {
+      display: inline-block; background: #eef1f4; color: var(--muted); font-size: 0.68rem;
+      font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; margin-bottom: 0.5rem;
+    }
+
+    /* ---- transition map table ---- */
+    details { margin-top: 0.5rem; }
+    summary { cursor: pointer; font-weight: 600; font-size: 0.92rem; padding: 0.4rem 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 0.82rem; margin-top: 0.75rem; }
+    th, td { border: 1px solid var(--line); padding: 0.5rem 0.7rem; text-align: left; }
+    th { background: #fafbfc; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.03em; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Foodbridge Modules Products — Discovery Prototype</h1>
+    <p class="lede">Can a wholesaler admin browse, search, filter, bulk-select, import/export, add
+    (full field set + Unit &amp; Price), view (packaging/inventory), edit and delete products the
+    same way they can in the As-is reference screens — on desktop <em>and</em> mobile?</p>
+
+    <div class="canonical-card">
+      <span class="badge">Canonical · Addendum 004</span>
+      <h3>Full Product Module — list · detail · modals for everything else</h3>
+      <p>Only two real pages: All Products and Product Detail (the As-is address bar never changes
+      for anything else). Add/Edit/Delete/Import are all modals opened over whichever page you're
+      on · full As-is field set + a nested Unit &amp; Price sub-modal (smallest/base unit,
+      conversion, GST, derived pricing) · list search, clearable category filter, pagination, bulk
+      select + Bulk Delete, Export/Import/Sample menus · Product Detail with Packaging &amp; Units,
+      Inventory Summary, gallery/lightbox and More Actions · one responsive screen set, not a
+      separate mobile build (design-principles.md §Decisions).</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="screens/screen-01.html">Open desktop →</a>
+        <button class="btn btn-secondary" id="btn-open-mobile" type="button">📱 Open mobile →</button>
+      </div>
+    </div>
+
+    <h2>Screens</h2>
+    <div class="screen-grid">
+      <a class="screen-card" href="screens/screen-01.html">
+        <span class="step-badge">Screen 01</span>
+        <h4>All Products</h4>
+        <p>List/cards, search, clearable category filter, pagination, bulk select + bulk delete, Export/Import/Sample menus, Add/Edit/Delete/Import modals. Entry point.</p>
+      </a>
+      <a class="screen-card" href="screens/screen-03.html">
+        <span class="step-badge">Screen 03</span>
+        <h4>Product Detail</h4>
+        <p>Gallery/lightbox, Packaging &amp; Units, Inventory Summary, More Actions, Edit/Delete modals. Reached via the eye icon — the only real navigation in the module.</p>
+      </a>
+    </div>
+    <p class="note" style="margin-top:0.85rem;">Add Product, Update Product, and Import's Preview
+    Product step are modals launched from the screens above — not separate pages (Addendum 004).</p>
+
+    <h2>Source material</h2>
+    <div class="ref-row">
+      <div class="ref-card">
+        <span class="step-badge">Addendum 002</span>
+        <a href="instructions/addendum-002-as-is-products-list.md">As-is Products List → clickable prototype</a>
+        <p class="note" style="margin-top:0.4rem;">Original list screenshot; decision for a full multi-screen (not modal) CRUD loop.</p>
+      </div>
+      <div class="ref-card">
+        <span class="step-badge">Addendum 003</span>
+        <a href="instructions/addendum-003-full-product-module.md">Full Product Module</a>
+        <p class="note" style="margin-top:0.4rem;">19 further screenshots — Add/Edit fields, Unit &amp; Price, import, detail, mobile.</p>
+      </div>
+      <div class="ref-card">
+        <span class="step-badge">Addendum 004</span>
+        <a href="instructions/addendum-004-modal-not-page-correction.md">Modal, not page (correction)</a>
+        <p class="note" style="margin-top:0.4rem;">Add/Edit/Import/Delete corrected to modals; delete copy, pagination, clearable select.</p>
+      </div>
+      <div class="ref-card">
+        <span class="step-badge">Inputs</span>
+        <a href="instructions/inputs/ProductModuleItteration/As-is/">As-is screenshots</a>
+        <p class="note" style="margin-top:0.4rem;">Source captures + text-derivative annotations for all three addenda.</p>
+      </div>
+    </div>
+
+    <details style="margin-top: 2.25rem;">
+      <summary>Transition map (→ SSOT-1 state-machine / SSOT-5 workflow)</summary>
+      <table>
+        <thead><tr><th>From screen / state</th><th>Event</th><th>To</th></tr></thead>
+        <tbody>
+          <tr><td>Screen 01 — All Products</td><td>Search / category select / pill</td><td>Screen 01 (filtered + paginated, same screen)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Page number / prev / next</td><td>Screen 01 (same screen, different page of results)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Click "+ Add Product" / row "pencil"</td><td>Add/Edit Product modal (same screen), Save closes it and refreshes the list</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Row/card action: view (eye)</td><td>Screen 03 — Product Detail (the only real navigation)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Row/card "trash" / Bulk Delete + confirm modal</td><td>Screen 01 (row(s) removed, same screen)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Import menu → "Select Your Product File"</td><td>Native file input → Preview Product modal (same screen)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Preview Product modal "Import"</td><td>Screen 01 (rows added, modal closes)</td></tr>
+          <tr><td>Screen 01 — All Products</td><td>Export / Sample menu items</td><td>Screen 01 (toast stub — no real file generation in discovery)</td></tr>
+          <tr><td>Add/Edit Product modal</td><td>"Select/Edit Unit & Price"</td><td>Unit &amp; Price sub-modal stacks on top; Save pops it, returns to Add/Edit with Price filled</td></tr>
+          <tr><td>Add/Edit Product modal</td><td>Add/Update Product (valid) or Cancel</td><td>Modal closes, underlying screen (List or Detail) refreshes in place</td></tr>
+          <tr><td>Screen 03 — Product Detail</td><td>Click main image</td><td>Image lightbox (same screen)</td></tr>
+          <tr><td>Screen 03 — Product Detail</td><td>Click "Edit Product"</td><td>Edit Product modal (same screen)</td></tr>
+          <tr><td>Screen 03 — Product Detail</td><td>More Actions → Copy SKU / Copy barcode</td><td>Screen 03 (clipboard stub, toast)</td></tr>
+          <tr><td>Screen 03 — Product Detail</td><td>More Actions → Delete + confirm modal</td><td>Screen 01 — All Products (row removed)</td></tr>
+          <tr><td>Screen 03 — Product Detail</td><td>Back to All Products</td><td>Screen 01 — All Products</td></tr>
+          <tr><td>Any screen</td><td>Sidebar item other than Products → All Products</td><td>Not prototyped this iteration — shows a toast</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p class="note" style="margin-top: 2rem;">Data for every screen comes from
+    <a href="seed-data/seed.json">seed-data/seed.json</a>, seeded once into <code>localStorage</code>
+    by <a href="screens/shared.js">screens/shared.js</a> so add/edit/delete/import persist while
+    clicking across screens in one browser session. Reset by clearing site data / running
+    <code>localStorage.clear()</code>.</p>
+  </div>
+
+  <script>
+    // "Open mobile" launches the same responsive screen in a phone-sized popup window so the
+    // existing @media (max-width: 760px) rules in shared.css genuinely engage — there is no
+    // separate mobile build (Addendum 003 D7), this just previews the same screens narrow.
+    document.getElementById('btn-open-mobile').addEventListener('click', () => {
+      window.open('screens/screen-01.html', 'fbp-mobile-preview', 'width=390,height=844');
+    });
+  </script>
+</body>
+</html>

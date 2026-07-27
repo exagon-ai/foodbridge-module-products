@@ -1,0 +1,497 @@
+<!doctype html>
+<!--
+  DISCOVERY SCREEN — Foodbridge Modules Products — "Screen 01: All Products"
+  Standalone-openable: open this file directly to review the screen in isolation.
+  Also reachable from the wiring hub (../index.html).
+  Replica + interactive rebuild of the As-is screenshots
+  (../instructions/inputs/ProductModuleItteration/As-is/, Addenda 002 + 003 + 004).
+  This is one of only two real pages in the prototype (the other is screen-03.html, Product
+  Detail) — per Addendum 004, Add/Edit/Import/Delete are all MODALS opened over this page, never
+  a navigation, matching the As-is app's address bar staying on /platform/products throughout.
+  Outgoing transitions (proto-FSM feeding SSOT-1 / SSOT-5):
+    - "Add Product" / row "pencil"        → FBP.openProductModal() (same page, no navigation)
+    - row "eye" icon                       → screen-03.html?id=<productId> (Product Detail — the only real nav)
+    - row "trash" / Bulk Delete            → FBP.openDeleteModal() (same page)
+    - Import → "Select Your Product File"  → native file input → Preview Product modal (same page)
+    - search box / category select/pills   → stays here, filters + paginates client-side
+  Rules: HTML/CSS/vanilla JS only. No frameworks, no build step, no real API calls.
+  Data comes from ../seed-data/seed.json via shared.js (localStorage-backed for this session).
+  Disposable — informs the SSOTs, not imported by development/.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foodbridge Modules Products — All Products</title>
+  <link rel="stylesheet" href="shared.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="shared.js"></script>
+  <script>
+    const PAGE_SIZE = 10; // Addendum 004 D4 — assumption, only a filtered 3-row example was captured
+    let allProducts = [];
+    let filtered = [];
+    let selectedCategory = '';
+    let selectedIds = new Set();
+    let meta = null;
+    let currentPage = 1;
+
+    async function render() {
+      const chromeHtml = await FBP.renderChrome('all-products', 'All Products');
+      document.getElementById('app').innerHTML = chromeHtml;
+      FBP.wireChromeNav(document.getElementById('app'));
+      await renderContent();
+    }
+
+    async function renderContent(preserveSelection) {
+      meta = await FBP.getMeta();
+      allProducts = await FBP.getProducts();
+      filtered = allProducts;
+      if (!preserveSelection) selectedIds = new Set();
+
+      const content = document.getElementById('content');
+      content.innerHTML = `
+        <div class="toolbar">
+          <div class="toolbar-group">
+            <button class="btn" id="btn-export" data-menu-id="export">⇪ Export</button>
+            <button class="btn" id="btn-import" data-menu-id="import">⇩ Import</button>
+            <button class="btn" id="btn-sample" data-menu-id="sample">⇩ Sample</button>
+            <button class="btn" id="btn-import-images">▦ Import Images</button>
+          </div>
+          <div class="toolbar-group">
+            <button class="btn btn-primary" id="btn-add">+ Add Product</button>
+          </div>
+        </div>
+
+        <div class="bulk-bar" id="bulk-bar">
+          <div class="bulk-count" id="bulk-count">0 selected</div>
+          <div class="bulk-actions">
+            <button class="btn" id="btn-bulk-update">Bulk Update</button>
+            <button class="btn btn-danger" id="btn-bulk-delete">🗑 Bulk Delete</button>
+            <button class="btn" id="btn-bulk-clear">Cancel</button>
+          </div>
+        </div>
+
+        <div class="filters">
+          <input class="search-input" id="search" type="text" placeholder="🔍 Search Product" />
+          <div class="select" id="category-select-mount" style="padding:0;border:none;min-width:220px;"></div>
+        </div>
+
+        <div class="pill-row" id="pill-row"></div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:2.5rem"><input type="checkbox" id="select-all" /></th>
+                <th>NAME</th>
+                <th>CATEGORY</th>
+                <th>PRICE</th>
+                <th>STOCK</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+
+        <div class="card-list" id="card-list"></div>
+
+        <div class="pagination-bar" id="pagination-bar"></div>
+
+        <input type="file" id="import-file-input" accept=".csv,.xlsx,.xls" style="display:none;" />
+
+        <div class="bottom-bar">
+          <div class="bottom-bar-item" id="bb-import-export"><span class="bb-icon">⇅</span>Import/Export</div>
+          <div class="bottom-bar-item" id="bb-images"><span class="bb-icon">🖼</span>Images</div>
+          <div class="bottom-bar-item primary" id="bb-add">+ Product</div>
+        </div>
+      `;
+
+      // ---- Category custom select (desktop) ----
+      const sselCategory = FBP.mountSearchSelect(document.getElementById('category-select-mount'), {
+        options: meta.categories.slice(),
+        value: selectedCategory,
+        placeholder: 'Select Category',
+        clearable: true,
+        onChange: (v) => {
+          selectedCategory = v;
+          syncPillActive();
+          applyFilters();
+        }
+      });
+
+      // ---- Category pill row (mobile) ----
+      renderPills();
+
+      function renderPills() {
+        const pillRow = document.getElementById('pill-row');
+        const cats = ['All', ...meta.categories];
+        pillRow.innerHTML = cats
+          .map((c) => `<button type="button" class="pill${(c === 'All' && !selectedCategory) || c === selectedCategory ? ' active' : ''}" data-cat="${c === 'All' ? '' : c}">${c}</button>`)
+          .join('');
+        pillRow.querySelectorAll('.pill').forEach((p) =>
+          p.addEventListener('click', () => {
+            selectedCategory = p.dataset.cat;
+            sselCategory.setValue(selectedCategory);
+            syncPillActive();
+            applyFilters();
+          })
+        );
+      }
+      function syncPillActive() {
+        document.querySelectorAll('.pill').forEach((p) => {
+          p.classList.toggle('active', p.dataset.cat === selectedCategory);
+        });
+      }
+
+      // ---- toolbar buttons ----
+      document.getElementById('btn-add').addEventListener('click', openAddModal);
+      document.getElementById('bb-add').addEventListener('click', openAddModal);
+      function openAddModal() {
+        FBP.openProductModal({ meta, product: null, mode: 'add', onSaved: () => renderContent() });
+      }
+
+      document.getElementById('btn-import-images').addEventListener('click', () =>
+        FBP.toast('Import Images is not part of this discovery iteration.')
+      );
+      document.getElementById('bb-images').addEventListener('click', () =>
+        FBP.toast('Import Images is not part of this discovery iteration.')
+      );
+      document.getElementById('bb-import-export').addEventListener('click', (e) => {
+        FBP.toggleMenu(e.currentTarget, `
+          <div class="menu-item" data-act="export"><span class="menu-icon">⇪</span>Export</div>
+          <div class="menu-item" data-act="import"><span class="menu-icon">⇩</span>Import</div>
+        `, (menu) => {
+          menu.querySelector('[data-act="export"]').addEventListener('click', () => { FBP.toast('Export to Excel — would download all products.'); });
+          menu.querySelector('[data-act="import"]').addEventListener('click', () => document.getElementById('import-file-input').click());
+        });
+      });
+
+      document.getElementById('btn-export').addEventListener('click', (e) => {
+        e.currentTarget.dataset.menuId = 'export';
+        FBP.toggleMenu(e.currentTarget, `
+          <div class="menu-item" data-act="xlsx"><span class="menu-icon">📊</span>Export to Excel</div>
+          <div class="menu-item" data-act="csv"><span class="menu-icon">📄</span>Export to CSV</div>
+        `, (menu) => {
+          menu.querySelectorAll('.menu-item').forEach((mi) =>
+            mi.addEventListener('click', () => FBP.toast(`Export to ${mi.dataset.act === 'xlsx' ? 'Excel' : 'CSV'} — would download ${filtered.length} products.`))
+          );
+        });
+      });
+
+      // ---- Import (Addendum 004 D2: file-pick + Preview Product are modals, no page nav) ----
+      document.getElementById('btn-import').addEventListener('click', (e) => {
+        e.currentTarget.dataset.menuId = 'import';
+        FBP.toggleMenu(e.currentTarget, `
+          <div class="menu-item" data-act="file"><span class="menu-icon">⬆</span>Select Your Product File</div>
+          <div class="menu-item" data-act="dir"><span class="menu-icon">🌐</span>Import from Directory</div>
+        `, (menu) => {
+          menu.querySelector('[data-act="file"]').addEventListener('click', () => document.getElementById('import-file-input').click());
+          menu.querySelector('[data-act="dir"]').addEventListener('click', () => FBP.toast('Import from Directory is not part of this discovery iteration.'));
+        });
+      });
+      document.getElementById('import-file-input').addEventListener('change', (e) => {
+        if (e.target.files.length) openImportPreviewModal();
+        e.target.value = '';
+      });
+
+      document.getElementById('btn-sample').addEventListener('click', (e) => {
+        e.currentTarget.dataset.menuId = 'sample';
+        FBP.toggleMenu(e.currentTarget, `
+          <div class="menu-item" data-act="xlsx"><span class="menu-icon">📊</span>Download Excel Sample</div>
+          <div class="menu-item" data-act="csv"><span class="menu-icon">📄</span>Download CSV Sample</div>
+        `, (menu) => {
+          menu.querySelectorAll('.menu-item').forEach((mi) =>
+            mi.addEventListener('click', () => FBP.toast(`Sample ${mi.dataset.act === 'xlsx' ? 'Excel' : 'CSV'} file would download.`))
+          );
+        });
+      });
+
+      // ---- search / pagination / bulk ----
+      document.getElementById('search').addEventListener('input', applyFilters);
+      document.getElementById('select-all').addEventListener('change', (e) => {
+        const pageIds = currentPageItems().map((p) => p.id);
+        if (e.target.checked) pageIds.forEach((id) => selectedIds.add(id));
+        else pageIds.forEach((id) => selectedIds.delete(id));
+        renderPage();
+      });
+      document.getElementById('btn-bulk-clear').addEventListener('click', () => {
+        selectedIds.clear();
+        renderPage();
+      });
+      document.getElementById('btn-bulk-update').addEventListener('click', () =>
+        FBP.toast('Bulk Update is not part of this discovery iteration — no reference UI observed.')
+      );
+      document.getElementById('btn-bulk-delete').addEventListener('click', () => {
+        if (!selectedIds.size) return;
+        const n = selectedIds.size;
+        FBP.openDeleteModal({
+          title: `Delete ${n} Product${n > 1 ? 's' : ''}?`,
+          message: `These products are currently part of your catalogue. Deleting them will remove them from all listings and you won't be able to recover them later.`,
+          onConfirm: async () => {
+            await FBP.deleteProducts([...selectedIds]);
+            FBP.toast(`${n} product(s) deleted.`);
+            await renderContent();
+          }
+        });
+      });
+
+      applyFilters();
+    }
+
+    // ---- Import → Preview Product modal (Addendum 003 rows, Addendum 004: modal not a page) ----
+    function openImportPreviewModal() {
+      const PREVIEW_ROWS = [
+        { category: 'Demo', subCategory: 'Test', product: 'Raw Materialss', price: 10, costPrice: 10, secondaryUnit: 'Cup', articleNumber: 'tEw88w', desc: '', box: 10 },
+        { category: 'TEST', subCategory: 'TEST', product: 'Curd', price: 190.4762, costPrice: 190.4762, secondaryUnit: 'Cup', articleNumber: 'jCejsr', desc: '', box: 10 }
+      ];
+      const html = `
+        <div class="modal-card modal-card--wide">
+          <button type="button" class="modal-close" id="pv-close">✕</button>
+          <div class="modal-title">Preview Product <a href="#" id="pv-edit" style="font-size:0.8rem;font-weight:600;margin-left:0.5rem;">✎ Edit</a></div>
+          <div class="preview-table-wrap">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Category</th><th>Sub Category</th><th>Product</th><th>Price</th>
+                  <th>Cost price</th><th>Secondary Unit</th><th>Article Number</th><th>Desc</th><th>Box</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${PREVIEW_ROWS.map(
+                  (r, i) => `<tr>
+                    <td>${i + 1}</td><td>${r.category}</td><td>${r.subCategory}</td><td>${r.product}</td>
+                    <td>${r.price}</td><td>${r.costPrice}</td><td>${r.secondaryUnit}</td><td>${r.articleNumber}</td>
+                    <td>${r.desc || ''}</td><td>${r.box}</td>
+                  </tr>`
+                ).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn" id="pv-cancel" style="flex:none;">Cancel</button>
+            <span style="flex:1;"></span>
+            <button type="button" class="btn btn-primary" id="pv-import" style="flex:none;">Import</button>
+          </div>
+        </div>
+      `;
+      const overlay = FBP.openModal(html, { persistent: true });
+      overlay.querySelector('#pv-close').addEventListener('click', () => FBP.closeModal(overlay));
+      overlay.querySelector('#pv-cancel').addEventListener('click', () => FBP.closeModal(overlay));
+      overlay.querySelector('#pv-edit').addEventListener('click', (e) => e.preventDefault());
+      overlay.querySelector('#pv-import').addEventListener('click', async () => {
+        for (const r of PREVIEW_ROWS) {
+          await FBP.addProduct({
+            name: r.product, artNo: r.articleNumber, category: r.category, description: r.desc || '',
+            images: [], image: { kind: 'icon' }, hsnSac: '', barcode: '', brand: '', coverage: 'none',
+            unit: { smallest: r.secondaryUnit, base: 'Box', unitsPerBase: r.box, gst: { rate: 0, treatment: 'included' }, priceSmallest: r.price, priceBase: Math.round(r.price * r.box * 100) / 100 },
+            price: r.price, tax: { mode: 'none', percent: 0 },
+            stock: { qty: 0, unit: r.secondaryUnit, canSell: 0, inOrders: 0 }
+          });
+        }
+        FBP.toast(`${PREVIEW_ROWS.length} product(s) imported.`);
+        FBP.closeModal(overlay);
+        await renderContent();
+      });
+    }
+
+    function currentPageItems() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      return filtered.slice(start, start + PAGE_SIZE);
+    }
+
+    function applyFilters() {
+      const q = document.getElementById('search').value.trim().toLowerCase();
+      filtered = allProducts.filter((p) => {
+        const matchesQ = !q || p.name.toLowerCase().includes(q) || p.artNo.toLowerCase().includes(q);
+        const matchesCat = !selectedCategory || p.category === selectedCategory;
+        return matchesQ && matchesCat;
+      });
+      currentPage = 1;
+      renderPage();
+    }
+
+    function renderPage() {
+      const pageItems = currentPageItems();
+      renderRows(pageItems);
+      renderCards(pageItems);
+      renderPagination();
+      syncBulkBar();
+    }
+
+    function renderPagination() {
+      const bar = document.getElementById('pagination-bar');
+      const total = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      if (!total) {
+        bar.innerHTML = '';
+        return;
+      }
+      const start = (currentPage - 1) * PAGE_SIZE + 1;
+      const end = Math.min(total, currentPage * PAGE_SIZE);
+      let pageBtns = '';
+      for (let p = 1; p <= totalPages; p++) {
+        pageBtns += `<button type="button" class="page-btn${p === currentPage ? ' active' : ''}" data-page="${p}">${p}</button>`;
+      }
+      bar.innerHTML = `
+        <div>SHOWING ${start}-${end} OF ${total}</div>
+        <div class="pagination-pages">
+          <button type="button" class="page-btn" id="page-prev" ${currentPage === 1 ? 'disabled' : ''}>‹</button>
+          ${pageBtns}
+          <button type="button" class="page-btn" id="page-next" ${currentPage === totalPages ? 'disabled' : ''}>›</button>
+        </div>
+      `;
+      bar.querySelector('#page-prev').addEventListener('click', () => { currentPage = Math.max(1, currentPage - 1); renderPage(); });
+      bar.querySelector('#page-next').addEventListener('click', () => { currentPage = Math.min(totalPages, currentPage + 1); renderPage(); });
+      bar.querySelectorAll('[data-page]').forEach((btn) =>
+        btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.page, 10); renderPage(); })
+      );
+    }
+
+    function syncBulkBar() {
+      const bar = document.getElementById('bulk-bar');
+      const count = document.getElementById('bulk-count');
+      count.textContent = `${selectedIds.size} selected`;
+      bar.classList.toggle('visible', selectedIds.size > 0);
+      const selectAll = document.getElementById('select-all');
+      const pageIds = currentPageItems().map((p) => p.id);
+      if (selectAll) selectAll.checked = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
+    }
+
+    function renderRows(products) {
+      const rows = document.getElementById('rows');
+      if (!products.length) {
+        rows.innerHTML = `<tr class="empty-row"><td colspan="6">No products match your search.</td></tr>`;
+        return;
+      }
+      rows.innerHTML = products
+        .map((p) => {
+          const inOrdersClass = p.stock.inOrders > 0 ? 'in-orders' : 'in-orders zero';
+          return `
+        <tr data-id="${p.id}">
+          <td><input type="checkbox" class="row-check" data-id="${p.id}" ${selectedIds.has(p.id) ? 'checked' : ''} /></td>
+          <td>
+            <div class="product-cell">
+              ${FBP.thumbHtml(p.image)}
+              <div>
+                <div class="product-name">${p.name}</div>
+                <div class="product-art">Art No: ${p.artNo}</div>
+              </div>
+            </div>
+          </td>
+          <td>${p.category || ''}</td>
+          <td>
+            <div class="price">${FBP.money(p.price)}</div>
+            <div class="tax-line">${FBP.taxLabel(p.tax)}</div>
+          </td>
+          <td>
+            <div class="stock-qty">${p.stock.qty} <span class="stock-unit">${p.stock.unit} total stock</span></div>
+            <div class="stock-line"><span class="can-sell">${p.stock.canSell} can sell</span> · <span class="${inOrdersClass}">${p.stock.inOrders} in orders</span></div>
+          </td>
+          <td>
+            <div class="actions-cell">
+              <button class="icon-btn" title="View" data-action="view" data-id="${p.id}">👁</button>
+              <button class="icon-btn" title="Edit" data-action="edit" data-id="${p.id}">✎</button>
+              <button class="icon-btn danger" title="Delete" data-action="delete" data-id="${p.id}">🗑</button>
+            </div>
+          </td>
+        </tr>`;
+        })
+        .join('');
+
+      wireRowActions(rows);
+      rows.querySelectorAll('.row-check').forEach((cb) =>
+        cb.addEventListener('change', (e) => {
+          if (e.target.checked) selectedIds.add(e.target.dataset.id);
+          else selectedIds.delete(e.target.dataset.id);
+          syncBulkBar();
+        })
+      );
+    }
+
+    function renderCards(products) {
+      const host = document.getElementById('card-list');
+      if (!products.length) {
+        host.innerHTML = `<div class="empty-row" style="padding:2rem;text-align:center;color:var(--muted)">No products match your search.</div>`;
+        return;
+      }
+      host.innerHTML = products
+        .map((p) => {
+          const status = FBP.stockStatus(p);
+          return `
+        <div class="product-card" data-id="${p.id}">
+          <div class="product-card-top">
+            <input type="checkbox" class="row-check" data-id="${p.id}" ${selectedIds.has(p.id) ? 'checked' : ''} />
+            <div class="product-cell">
+              ${FBP.thumbHtml(p.image, 52)}
+              <div>
+                <div class="product-name">${p.name}</div>
+                <div class="product-art">Art No: ${p.artNo}</div>
+                <span class="badge">${p.category || ''}</span>
+              </div>
+            </div>
+            <div class="product-card-price">
+              ${status ? `<div class="status-pill ${status.cls}">${status.label}</div>` : ''}
+              <div class="price">${FBP.money(p.price)}</div>
+              <div class="tax-line">${FBP.taxLabel(p.tax)}</div>
+            </div>
+          </div>
+          <div class="product-card-stats">
+            <div class="product-card-stat"><span class="stat-value">${p.stock.qty}</span><span class="stat-label">${p.stock.unit} total</span></div>
+            <div class="product-card-stat"><span class="stat-value can-sell">${p.stock.canSell}</span><span class="stat-label">Can sell</span></div>
+            <div class="product-card-stat"><span class="stat-value ${p.stock.inOrders > 0 ? 'in-orders' : 'in-orders zero'}">${p.stock.inOrders}</span><span class="stat-label">In orders</span></div>
+            <div class="product-card-actions">
+              <button class="icon-btn" title="View" data-action="view" data-id="${p.id}">👁</button>
+              <button class="icon-btn" title="Edit" data-action="edit" data-id="${p.id}">✎</button>
+              <button class="icon-btn danger" title="Delete" data-action="delete" data-id="${p.id}">🗑</button>
+            </div>
+          </div>
+        </div>`;
+        })
+        .join('');
+
+      wireRowActions(host);
+      host.querySelectorAll('.row-check').forEach((cb) =>
+        cb.addEventListener('change', (e) => {
+          if (e.target.checked) selectedIds.add(e.target.dataset.id);
+          else selectedIds.delete(e.target.dataset.id);
+          syncBulkBar();
+        })
+      );
+    }
+
+    function wireRowActions(root) {
+      root.querySelectorAll('[data-action="view"]').forEach((btn) =>
+        btn.addEventListener('click', () => (window.location.href = `screen-03.html?id=${btn.dataset.id}`))
+      );
+      root.querySelectorAll('[data-action="edit"]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          const product = allProducts.find((p) => p.id === btn.dataset.id);
+          if (!product) return;
+          FBP.openProductModal({ meta, product, mode: 'edit', onSaved: () => renderContent(true) });
+        })
+      );
+      root.querySelectorAll('[data-action="delete"]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          const product = allProducts.find((p) => p.id === btn.dataset.id);
+          if (!product) return;
+          FBP.openDeleteModal({
+            title: `Delete ${product.name}?`,
+            message: `This product is currently part of 1 catalogues. Deleting it will remove it from all listings and you won't be able to recover it later.`,
+            onConfirm: async () => {
+              await FBP.deleteProduct(product.id);
+              FBP.toast(`"${product.name}" deleted.`);
+              await renderContent();
+            }
+          });
+        })
+      );
+    }
+
+    render();
+  </script>
+</body>
+</html>

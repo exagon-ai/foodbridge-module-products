@@ -1,0 +1,172 @@
+<!doctype html>
+<!--
+  DISCOVERY SCREEN — Foodbridge Modules Products — "Screen 03: Product Detail"
+  Standalone-openable: open this file directly (defaults to the first seed product if no
+  ?id= is given) to review the screen in isolation.
+  Also reachable from screen-01.html (eye icon) with ?id=<productId>. This is one of only two
+  real pages in the prototype (the other is screen-01.html, All Products) — per Addendum 004,
+  "Edit Product" and the delete confirmation are MODALS opened over this page, not navigations.
+  Addendum 003 additions: image gallery + click-to-zoom lightbox, SKU/Category/Brand/Unit/
+  Base Unit/Barcode fields, Selling Price + Tax Rate panel, "Packaging & Units" table (derived
+  from product.unit — see FBP.packagingRows), "Inventory Summary" stat tiles (relabelled from
+  the existing stock{} shape), and a "More Actions" menu (Copy SKU, Copy barcode, Delete).
+  Outgoing transitions (proto-FSM feeding SSOT-1 / SSOT-5):
+    - "Edit Product" button             → FBP.openProductModal() (same page, no navigation)
+    - More Actions → "Delete" + confirm → FBP.openDeleteModal(), then screen-01.html (product removed)
+    - breadcrumb "All Products"         → screen-01.html
+    - click main image                  → lightbox overlay (same screen)
+  Rules: HTML/CSS/vanilla JS only. No frameworks, no build step, no real API calls.
+  Data comes from ../seed-data/seed.json via shared.js (localStorage-backed for this session).
+  Disposable — informs the SSOTs, not imported by development/.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foodbridge Modules Products — Product Detail</title>
+  <link rel="stylesheet" href="shared.css" />
+</head>
+<body>
+  <div id="app"></div>
+
+  <script src="shared.js"></script>
+  <script>
+    async function render() {
+      const chromeHtml = await FBP.renderChrome('all-products', 'Product');
+      document.getElementById('app').innerHTML = chromeHtml;
+      FBP.wireChromeNav(document.getElementById('app'));
+      await renderContent();
+    }
+
+    async function renderContent() {
+      const content = document.getElementById('content');
+      const id = FBP.qs('id');
+      const products = await FBP.getProducts();
+      const product = (id && (await FBP.getProduct(id))) || products[0];
+
+      if (!product) {
+        content.innerHTML = `<div class="breadcrumb"><a href="screen-01.html">All Products</a> / Not found</div><p>No products left. <a href="screen-01.html">Add one from All Products</a>.</p>`;
+        return;
+      }
+
+      const meta = await FBP.getMeta();
+      const images = (product.images && product.images.length ? product.images : [product.image]).filter(Boolean);
+      const unit = product.unit;
+      const packaging = FBP.packagingRows(product);
+      const tiles = FBP.inventoryTiles(product);
+
+      content.innerHTML = `
+        <div class="breadcrumb"><a href="screen-01.html">All Products</a> / ${product.name}</div>
+        <div class="detail-card" style="max-width:1040px;">
+          <div class="pd-head">
+            <div class="pd-gallery">
+              <div class="pd-main-image" id="pd-main-image">${FBP.thumbHtml(images[0], 220)}</div>
+              <div class="pd-thumbs" id="pd-thumbs">
+                ${images
+                  .map((img, i) => `<div class="pd-thumb${i === 0 ? ' active' : ''}" data-index="${i}">${FBP.thumbHtml(img, 54)}</div>`)
+                  .join('')}
+              </div>
+            </div>
+            <div class="pd-body">
+              <div class="pd-name-row"><h2>${product.name}</h2><span class="badge badge-active">Active</span></div>
+              <div class="pd-actions">
+                <button class="btn" id="btn-edit">✎ Edit Product</button>
+                <button class="btn" id="btn-more" data-menu-id="more">⋮ More Actions ▾</button>
+              </div>
+              <div class="pd-fields-grid">
+                <div class="detail-item"><div class="label">SKU / Article No.</div><div class="value">${product.artNo}</div></div>
+                <div class="detail-item"><div class="label">Category</div><div class="value">${(product.category || 'Uncategorised').toUpperCase()}</div></div>
+                <div class="detail-item"><div class="label">Brand</div><div class="value">${product.brand || '—'}</div></div>
+                <div class="detail-item"><div class="label">Unit (Smallest)</div><div class="value">${unit ? unit.smallest : '—'}</div></div>
+                <div class="detail-item"><div class="label">Base Unit</div><div class="value">${unit ? unit.base : '—'}</div></div>
+                <div class="detail-item"><div class="label">Barcode</div><div class="value">${product.barcode || '—'}</div></div>
+              </div>
+            </div>
+            <div class="pd-price">
+              <div class="label">Selling Price (Incl. tax)</div>
+              <div class="pd-price-value">${FBP.money(product.price)}</div>
+              <div class="label" style="margin-top:0.9rem;">Tax Rate</div>
+              <div class="pd-tax-value">${unit ? FBP.gstLabel(unit.gst) : FBP.taxLabel(product.tax)}</div>
+            </div>
+          </div>
+
+          <div class="detail-cards-grid">
+            <div class="panel">
+              <div class="panel-title">📚 Packaging &amp; Units</div>
+              ${
+                packaging.length
+                  ? `<table class="packaging-table">
+                      <thead><tr><th>Unit</th><th>Conversion</th><th>Price (${unit ? FBP.gstLabel(unit.gst) : '0%'} incl. tax)</th></tr></thead>
+                      <tbody>
+                        ${packaging
+                          .map(
+                            (r) => `<tr><td>${r.unit}<span class="unit-tag">${r.tag}</span></td><td>${r.conversion}</td><td>${FBP.money(r.price)}</td></tr>`
+                          )
+                          .join('')}
+                      </tbody>
+                    </table>`
+                  : `<p style="color:var(--muted);font-size:0.85rem;">No unit/pricing configured for this product yet.</p>`
+              }
+            </div>
+            <div class="panel">
+              <div class="panel-title">📦 Inventory Summary</div>
+              <div class="inventory-tiles">
+                ${tiles
+                  .map(
+                    (t) => `<div class="inv-tile"><div class="inv-icon">${t.icon}</div><div class="inv-value">${t.value}</div><div class="inv-label">${t.label}</div></div>`
+                  )
+                  .join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // ---- gallery ----
+      content.querySelectorAll('.pd-thumb').forEach((thumb) =>
+        thumb.addEventListener('click', () => {
+          content.querySelectorAll('.pd-thumb').forEach((t) => t.classList.remove('active'));
+          thumb.classList.add('active');
+          document.getElementById('pd-main-image').innerHTML = FBP.thumbHtml(images[parseInt(thumb.dataset.index, 10)], 220);
+        })
+      );
+      document.getElementById('pd-main-image').addEventListener('click', () => {
+        const activeIndex = content.querySelector('.pd-thumb.active')?.dataset.index || 0;
+        const overlay = FBP.openModal(
+          `<button type="button" class="modal-lightbox-close" id="lb-close">✕</button>
+           <div class="modal-lightbox-img">${FBP.thumbHtml(images[parseInt(activeIndex, 10)], 360)}</div>`,
+          { lightbox: true }
+        );
+        overlay.querySelector('#lb-close').addEventListener('click', () => FBP.closeModal(overlay));
+      });
+
+      // ---- actions ----
+      document.getElementById('btn-edit').addEventListener('click', () => {
+        FBP.openProductModal({ meta, product, mode: 'edit', onSaved: () => renderContent() });
+      });
+      document.getElementById('btn-more').addEventListener('click', (e) => {
+        FBP.toggleMenu(e.currentTarget, `
+          <div class="menu-item" data-act="copy-sku"><span class="menu-icon">⎘</span>Copy SKU / Article No.</div>
+          <div class="menu-item" data-act="copy-barcode"><span class="menu-icon">🏷</span>Copy barcode</div>
+          <div class="menu-item" data-act="delete" style="color:#c23636;"><span class="menu-icon">🗑</span>Delete Product</div>
+        `, (menu) => {
+          menu.querySelector('[data-act="copy-sku"]').addEventListener('click', () => FBP.copyText(product.artNo, 'SKU / Article No.'));
+          menu.querySelector('[data-act="copy-barcode"]').addEventListener('click', () => FBP.copyText(product.barcode || '', 'Barcode'));
+          menu.querySelector('[data-act="delete"]').addEventListener('click', () => {
+            FBP.openDeleteModal({
+              title: `Delete ${product.name}?`,
+              message: `This product is currently part of 1 catalogues. Deleting it will remove it from all listings and you won't be able to recover it later.`,
+              onConfirm: async () => {
+                await FBP.deleteProduct(product.id);
+                window.location.href = 'screen-01.html';
+              }
+            });
+          });
+        });
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>

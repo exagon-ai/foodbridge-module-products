@@ -1,0 +1,7 @@
+# Dependencies and build output — rebuilt by `npm install` (workspace postinstall builds the SSOT package)
+node_modules/
+dist/
+
+# Logs and OS cruft
+*.log
+.DS_Store
