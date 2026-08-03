@@ -432,6 +432,23 @@ table.ptable{width:100%;border-collapse:collapse}
 .tagchips .tagchip{background:var(--accent-soft);color:var(--accent);font-size:.75rem;padding:4px 10px}
 .tagchips .tagchip button{background:none;border:none;color:var(--accent);display:flex}
 
+/* ---------- Foodbridge image directory modal ---------- */
+#modalImages{width:min(1280px,calc(100vw - 64px));height:min(844px,calc(100vh - 72px));max-height:none;padding:0;border-radius:14px;overflow:hidden}
+.idir-head{height:74px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.idir-brand{display:flex;align-items:center;gap:12px}.idir-logo{width:34px;height:34px;border-radius:9px;background:#10b981;color:#fff;display:flex;align-items:center;justify-content:center}
+.idir-brand b{display:block;font-size:.98rem}.idir-brand small{display:block;color:var(--text-faint);font-size:.78rem;margin-top:2px}
+.idir-head-actions{display:flex;align-items:center;gap:16px}.idir-tabs{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+.idir-tab{height:30px;padding:0 12px;border:0;background:#fff;color:var(--text-muted);display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700}
+.idir-tab.active{background:#059669;color:#fff}.idir-tab .i{width:13px;height:13px}.idir-close{border:0;background:none;color:var(--text-faint);display:flex;padding:4px}
+.idir-body{height:calc(100% - 134px);padding:0 24px;overflow:auto}.idir-search{position:relative;margin:0 -24px;padding:0 24px 12px;border-bottom:1px solid var(--border)}
+.idir-search .i{position:absolute;left:45px;top:19px;color:var(--text-faint)}.idir-search input{width:100%;height:50px;padding:0 18px 0 52px;border:1px solid var(--border);border-radius:28px;background:#fbfcfd;font-size:1rem;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.idir-count{font-size:.78rem;color:var(--text-faint);margin:8px 0}.idir-drop{height:calc(100% - 88px);min-height:430px;border:2px dashed #dfe4ea;border-radius:14px;display:flex;align-items:center;justify-content:center;text-align:center;color:#667085;cursor:pointer}
+.idir-drop:hover,.idir-drop.drag{border-color:#10b981;background:#f0fdf4}.idir-upload-icon{width:64px;height:64px;border-radius:14px;background:#f6f7f9;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#98a2b3}.idir-upload-icon .i{width:30px;height:30px}
+.idir-drop b{display:block;font-weight:500}.idir-drop small{display:block;color:#98a2b3;margin-top:5px}.idir-local{padding-top:12px}.idir-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px}.idir-chip{border:0;background:#f2f4f7;color:#475467;padding:6px 14px;border-radius:999px;font-size:.76rem;font-weight:700;white-space:nowrap}.idir-chip.active{background:#059669;color:#fff}
+.idir-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px}.idir-img{aspect-ratio:1;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#f3f4f6;padding:0;position:relative}.idir-img img{width:100%;height:100%;object-fit:cover}.idir-img.selected{outline:3px solid #10b981;outline-offset:-3px}.idir-img.selected::after{content:'✓';position:absolute;right:5px;top:5px;width:20px;height:20px;border-radius:50%;background:#10b981;color:#fff;display:grid;place-items:center;font-size:.72rem;font-weight:800}
+.idir-more{display:block;margin:16px auto;border:0;border-radius:8px;background:#ecfdf3;color:#047857;padding:9px 18px;font-weight:700}.idir-foot{height:60px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:#98a2b3;font-size:.85rem}.idir-foot-actions{display:flex;gap:10px}.idir-foot .btn{height:38px;min-height:38px}.idir-foot .btn:disabled{background:#86cfbb;border-color:#86cfbb;color:#fff}
+.idir-file{display:none}
+
 /* ---------- import preview table ---------- */
 .previewwrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:14px 0}
 table.pv{width:100%;border-collapse:collapse;min-width:640px}
@@ -471,6 +488,8 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
   .detail-grid{grid-template-columns:1fr}
   .metagrid{grid-template-columns:repeat(2,1fr)}
   .gal-actions.three{grid-template-columns:1fr 1fr}
+  #modalImages{width:100vw;height:100dvh;max-height:none;border-radius:0;padding:0}
+  .idir-head{height:62px;padding:12px 14px}.idir-brand small{display:none}.idir-head-actions{gap:8px}.idir-tab{padding:0 9px}.idir-body{height:calc(100% - 124px);padding:0 12px}.idir-search{margin:0 -12px;padding:0 12px 10px}.idir-search .i{left:31px;top:16px}.idir-search input{height:46px;padding-left:48px}.idir-drop{min-height:360px}.idir-grid{grid-template-columns:repeat(3,1fr)}.idir-foot{height:62px;padding:0 12px}.idir-foot>span{font-size:.72rem}.idir-foot-actions{gap:6px}.idir-foot .btn{padding:0 10px}
 }
 
 /* Products.jsx fidelity layer: mirrors the production page's Windmill/Tailwind shell. */
@@ -642,7 +661,7 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
         <button class="navlink" data-toast="Categories">Categories</button>
         <button class="navlink" data-toast="Raw Materials">Raw Materials</button>
         <button class="navlink" data-toast="Product Directory">Product Directory</button>
-        <button class="navlink" data-view="gallery">Image Directory</button>
+        <button class="navlink" id="btnImageDirectory">Image Directory</button>
       </div>
       <button class="navlink" data-toast="Customers">${ICO:users}Customers</button>
       <div class="navsub customer-sub">
@@ -771,9 +790,6 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
       <!-- ============ DETAIL VIEW ============ -->
       <section id="view-detail" class="hidden"></section>
 
-      <!-- ============ GALLERY VIEW ============ -->
-      <section id="view-gallery" class="hidden"></section>
-
     </div>
   </div>
 </div>
@@ -898,6 +914,43 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
   <div class="field"><label id="perUnitLbl" style="color:var(--accent)">Selling Price Per UNIT</label><div style="position:relative"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-faint)">₹</span><input type="number" id="uPriceUnit" style="padding-left:26px" placeholder="0.00"></div></div>
   <div class="field"><label id="perBoxLbl" style="color:var(--accent)">Selling Price Per BOX</label><div style="position:relative"><span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-faint)">₹</span><input type="number" id="uPriceBox" style="padding-left:26px" placeholder="0.00"></div></div>
   <button class="btn btn-primary btn-block" id="btnSaveUnit">SAVE</button>
+</div>
+
+<!-- Foodbridge image directory -->
+<div class="modal" id="modalImages" role="dialog" aria-modal="true" aria-labelledby="idirTitle">
+  <div class="idir-head">
+    <div class="idir-brand"><span class="idir-logo">${ICO:globe}</span><span><b id="idirTitle">Foodbridge Directory</b><small id="idirSubtitle">Global image catalogue</small></span></div>
+    <div class="idir-head-actions">
+      <div class="idir-tabs" role="tablist">
+        <button class="idir-tab active" id="idirGlobal" role="tab">${ICO:globe}Global</button>
+        <button class="idir-tab" id="idirLocal" role="tab">${ICO:bag}Local</button>
+      </div>
+      <button class="idir-close" data-close-modal="modalImages" aria-label="Close image directory">${ICO:x}</button>
+    </div>
+  </div>
+  <div class="idir-body">
+    <div class="idir-search">${ICO:search}<input id="idirSearch" type="search" placeholder="Search selected images…"></div>
+    <section id="idirGlobalPanel">
+      <div class="idir-count" id="idirGlobalCount">0 images selected</div>
+      <div class="idir-drop" id="idirDrop" tabindex="0">
+        <div><span class="idir-upload-icon">${ICO:upload}</span><b>Drag &amp; drop images here</b><small>or click to browse from your device</small></div>
+      </div>
+      <input class="idir-file" id="idirFile" type="file" accept="image/*" multiple>
+    </section>
+    <section class="idir-local hidden" id="idirLocalPanel">
+      <div class="idir-chips" id="idirChips"></div>
+      <div class="idir-grid" id="idirGrid"></div>
+      <button class="idir-more" id="idirMore">Load more images</button>
+    </section>
+  </div>
+  <div class="idir-foot">
+    <span id="idirFootText">Select images to import</span>
+    <div class="idir-foot-actions">
+      <button class="btn" data-close-modal="modalImages">Cancel</button>
+      <button class="btn" id="idirSelect">${ICO:upload}<b>Select</b></button>
+      <button class="btn btn-primary" id="idirImport" disabled>Import</button>
+    </div>
+  </div>
 </div>
 
 <!-- Import menu modal (also used mobile) -->
@@ -1072,8 +1125,6 @@ let searchQ = '';
 let currentEditProduct = null;
 let pendingUnit = null;
 let deleteCtx = null;
-let galleryPhotos = 0;
-let galleryLocked = false;
 let bulkActionKind = null;
 
 const $ = s=>document.querySelector(s);
@@ -1141,11 +1192,10 @@ $('#btnUser').addEventListener('click',(e)=>{ e.stopPropagation(); toggleMenu('m
 
 /* ---------------- navigation between views ---------------- */
 function navigateTo(view, ctx){
-  ['list','detail','gallery'].forEach(v=>$('#view-'+v).classList.add('hidden'));
+  ['list','detail'].forEach(v=>$('#view-'+v).classList.add('hidden'));
   $('#view-'+view).classList.remove('hidden');
   $$('.navsub .navlink').forEach(n=>n.classList.remove('active'));
   if(view==='list'){ $('#pageTitle').textContent='All Products'; $$('.navsub .navlink')[0].classList.add('active'); renderAll(); }
-  if(view==='gallery'){ $('#pageTitle').textContent='Image Gallery'; $$('.navsub .navlink')[4].classList.add('active'); renderGallery(ctx); }
   if(view==='detail'){ $('#pageTitle').textContent='Product'; renderDetail(ctx); }
   window.scrollTo({top:0});
 }
@@ -1482,9 +1532,6 @@ $('#btnDoImport').addEventListener('click', ()=>{
   navigateTo('list'); render();
 });
 
-/* mobile-only import menu shortcut used by bottom bar */
-$('#btnImportImages').addEventListener('click', ()=> navigateTo('gallery'));
-
 /* ---------------- add / edit product drawer ---------------- */
 let drawerImages = [null,null,null,null];
 function randArt(){ return Array.from({length:6},()=>'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*54)]).join(''); }
@@ -1793,9 +1840,75 @@ function updateDots(){ $('#galDots').innerHTML = [0,1,2,3].map(()=>`<span class=
 function dotAt(i, cls){ const dots = $$('#galDots .dot'); if(dots[i]) dots[i].className='dot '+cls; }
 function updateCount(){ $('#galCount').textContent = `${galleryPhotos}/4 photos`; }
 
+/* ---------------- Foodbridge image directory modal ---------------- */
+const directoryGroups = ['All','testing','check','dev','Testt-dev','Lemon','Test-siblings'];
+let imageDirectoryTab = 'global';
+let imageGroup = 'All';
+let imageSelection = new Set();
+let uploadedDirectoryImages = [];
+const localDirectoryImages = [
+  ...products.filter(product=>product.image).map((product,index)=>({id:'product-'+product.id,src:product.image,label:product.name,group:directoryGroups[1+(index%directoryGroups.length-1)]||'testing'})),
+  ...Array.from({length:17},(_,index)=>({id:'placeholder-'+index,src:'',label:'Directory image '+(index+1),group:directoryGroups[1+(index%6)]}))
+];
+function openImageDirectory(tab='global'){
+  imageSelection.clear();
+  uploadedDirectoryImages=[];
+  switchImageDirectory(tab);
+  updateImageDirectorySelection();
+  openModal('modalImages');
+}
+function switchImageDirectory(tab){
+  imageDirectoryTab=tab;
+  const local=tab==='local';
+  $('#idirGlobal').classList.toggle('active',!local); $('#idirLocal').classList.toggle('active',local);
+  $('#idirGlobalPanel').classList.toggle('hidden',local); $('#idirLocalPanel').classList.toggle('hidden',!local);
+  $('#idirTitle').textContent=local?'Local Directory':'Foodbridge Directory';
+  $('#idirSubtitle').textContent=local?'Your local images':'Global image catalogue';
+  renderDirectoryGrid();
+}
+function renderDirectoryGrid(){
+  const query=$('#idirSearch').value.trim().toLowerCase();
+  const counts=Object.fromEntries(directoryGroups.map(group=>[group,localDirectoryImages.filter(img=>group==='All'||img.group===group).length]));
+  $('#idirChips').innerHTML=directoryGroups.map(group=>`<button class="idir-chip ${group===imageGroup?'active':''}" data-idir-group="${esc(group)}">${esc(group)} <span>${counts[group]}</span></button>`).join('');
+  $$('[data-idir-group]').forEach(button=>button.addEventListener('click',()=>{imageGroup=button.dataset.idirGroup;renderDirectoryGrid();}));
+  const visible=localDirectoryImages.filter(img=>(imageGroup==='All'||img.group===imageGroup)&&(!query||img.label.toLowerCase().includes(query)));
+  $('#idirGrid').innerHTML=visible.map((img,index)=>`<button class="idir-img ${imageSelection.has(img.id)?'selected':''}" data-idir-id="${img.id}" aria-label="Select ${esc(img.label)}">${img.src?`<img src="${esc(img.src)}" alt="${esc(img.label)}">`:`<span style="display:block;width:100%;height:100%;background:${IMG(28+index*19)}"></span>`}</button>`).join('');
+  $$('[data-idir-id]').forEach(button=>button.addEventListener('click',()=>{const id=button.dataset.idirId;imageSelection.has(id)?imageSelection.delete(id):imageSelection.add(id);renderDirectoryGrid();updateImageDirectorySelection();}));
+}
+function updateImageDirectorySelection(){
+  const count=imageSelection.size+uploadedDirectoryImages.length;
+  $('#idirGlobalCount').textContent=`${count} image${count===1?'':'s'} selected`;
+  $('#idirFootText').textContent=count?`${count} image${count===1?'':'s'} ready to import`:'Select images to import';
+  $('#idirImport').disabled=count===0;
+}
+function acceptImageFiles(files){
+  [...files].filter(file=>file.type.startsWith('image/')).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=()=>{uploadedDirectoryImages.push({id:'upload-'+Date.now()+Math.random(),src:reader.result,label:file.name});updateImageDirectorySelection();};
+    reader.readAsDataURL(file);
+  });
+}
+$('#idirGlobal').addEventListener('click',()=>switchImageDirectory('global'));
+$('#idirLocal').addEventListener('click',()=>switchImageDirectory('local'));
+$('#idirSearch').addEventListener('input',()=>{if(imageDirectoryTab==='local')renderDirectoryGrid();});
+$('#idirDrop').addEventListener('click',()=>$('#idirFile').click());
+$('#idirDrop').addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();$('#idirFile').click();}});
+$('#idirFile').addEventListener('change',event=>acceptImageFiles(event.target.files));
+['dragenter','dragover'].forEach(type=>$('#idirDrop').addEventListener(type,event=>{event.preventDefault();$('#idirDrop').classList.add('drag');}));
+['dragleave','drop'].forEach(type=>$('#idirDrop').addEventListener(type,event=>{$('#idirDrop').classList.remove('drag');if(type==='drop'){event.preventDefault();acceptImageFiles(event.dataTransfer.files);}}));
+$('#idirSelect').addEventListener('click',()=>{imageDirectoryTab==='global'?$('#idirFile').click():switchImageDirectory('local');});
+$('#idirMore').addEventListener('click',()=>toast('All local directory images are loaded'));
+$('#idirImport').addEventListener('click',()=>{
+  const chosen=[...uploadedDirectoryImages,...localDirectoryImages.filter(img=>imageSelection.has(img.id)&&img.src)];
+  chosen.forEach((image,index)=>{if(products[index]){products[index].image=image.src;products[index].noThumb=false;}});
+  closeModal('modalImages');render();toast(`${imageSelection.size+uploadedDirectoryImages.length} image${imageSelection.size+uploadedDirectoryImages.length===1?'':'s'} imported`);
+});
+$('#btnImportImages').addEventListener('click',()=>openImageDirectory('global'));
+$('#btnImageDirectory').addEventListener('click',()=>openImageDirectory('local'));
+
 /* ---------------- mobile bottom bar / sheets ---------------- */
 $('#bbImportExport').addEventListener('click', ()=> openSheet('sheetActions'));
-$('#bbImages').addEventListener('click', ()=> navigateTo('gallery'));
+$('#bbImages').addEventListener('click', ()=> openImageDirectory('global'));
 $('#bbBulk').addEventListener('click', ()=>{ if(selected.size===0){ toast('Select products first','alert'); return;} openSheet('sheetBulk'); });
 $('#bbSheet').addEventListener('click', ()=> toast('Opening connected Google Sheet…'));
 $('#btnSheet').addEventListener('click', ()=> toast('Opening connected Google Sheet…'));
@@ -1815,7 +1928,8 @@ if(reviewState === 'unit') { openProductDrawer(null); openModal('modalUnit'); }
 if(reviewState === 'import') openModal('modalImportPick');
 if(reviewState === 'preview') openModal('modalPreview');
 if(reviewState === 'detail') navigateTo('detail', products[0].id);
-if(reviewState === 'gallery') navigateTo('gallery', products[0].id);
+if(reviewState === 'gallery' || reviewState === 'images') openImageDirectory('global');
+if(reviewState === 'images-local') openImageDirectory('local');
 if(reviewState === 'bulk') {
   selected = new Set(products.map(product => product.id));
   render();
