@@ -123,7 +123,7 @@
       persistent demo data. Both launch actions below open this same responsive V2 experience.</p>
       <div class="btn-row">
         <a class="btn btn-primary" href="preview/v2.html">Open V2 desktop →</a>
-        <button class="btn btn-secondary" id="btn-open-v2-mobile-hero" type="button">📱 Open V2 mobile →</button>
+        <a class="btn btn-secondary" href="preview/mobile-v2.html">📱 Open V2 mobile →</a>
       </div>
     </div>
 
@@ -199,13 +199,5 @@
     <code>localStorage.clear()</code>.</p>
   </div>
 
-  <script>
-    // "Open mobile" launches the same responsive screen in a phone-sized popup window so the
-    // existing @media (max-width: 760px) rules in shared.css genuinely engage — there is no
-    // separate mobile build (Addendum 003 D7), this just previews the same screens narrow.
-    document.getElementById('btn-open-v2-mobile-hero').addEventListener('click', () => {
-      window.open('preview/v2.html', 'fbp-v2-mobile-preview', 'width=390,height=844');
-    });
-  </script>
 </body>
 </html>

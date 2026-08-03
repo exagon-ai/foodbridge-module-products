@@ -95,7 +95,7 @@ html,body{margin:0;padding:0}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   font-size:14.5px;
   line-height:1.45;
   -webkit-font-smoothing:antialiased;
@@ -498,6 +498,37 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
 .thumb{border-radius:0;width:44px!important;height:44px!important}.pricecell b{font-size:.875rem}.stockcell .total{font-size:.875rem}
 .iconbtn{width:28px;height:28px;border:0;border-radius:5px;color:#374151}.foot{height:76px;padding:16px 32px}.pagebtn{border:0}
 .pagebtn.active{border-radius:6px;background:#17bd59}
+
+/* ProductDrawer.jsx / MainDrawer.jsx parity. */
+.drawer{left:345px;right:0;width:auto!important;min-width:760px;background:#fff}
+.drawer-head{height:98px;padding:25px 24px;border-color:#e5e7eb;align-items:flex-start}
+.drawer-head h3{font-size:1.25rem;font-weight:500;color:#111827}.drawer-head p{font-size:.875rem;color:#111827;margin-top:0}
+.drawer-head .modal-close{position:absolute;right:24px;top:25px;width:40px;height:40px;border-radius:999px;background:#fff;color:#ef4444;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.drawer-body{padding:20px 24px 92px;gap:0}.drawer-body>.field,.drawer-body>.field-row2>.field{display:grid;grid-template-columns:minmax(190px,33%) minmax(0,1fr);align-items:center;gap:16px;padding:11px 0}
+.drawer-body>.field-row2{display:contents}.drawer-body .field>label{grid-column:1;margin:0;font-weight:400;color:#1f2937}
+.drawer-body .field>:not(label){grid-column:2}.drawer-body .field>.withbtn{width:100%}
+.drawer-body .field input[type=text],.drawer-body .field input[type=number],.drawer-body .field textarea,.drawer-body .field select{min-height:42px;border-radius:6px;border-color:#d1d5db}
+.drawer-body .field textarea{min-height:106px}.drawer-body .imgslots{grid-template-columns:repeat(4,96px);justify-content:space-between}
+.drawer-body .imgslot{width:96px;height:96px;border-radius:5px;background:#fff}.drawer-body .unitbox{justify-content:flex-start;border:0;padding:0;background:#fff}
+.drawer-body .coverage{align-items:center}.drawer-body .field>.hint{margin-top:6px}.drawer-foot{position:absolute;left:0;right:0;bottom:0;height:96px;padding:24px;background:#fff;z-index:2}
+.drawer-foot .btn{height:48px;border-radius:5px}.drawer-foot .btn-primary{order:0}.drawer-foot .btn-outline-danger{order:1;background:#fff;border-color:#e5e7eb;color:#ef4444}
+
+/* FormModal / UnitPriceForm parity. */
+#modalUnit{width:min(896px,calc(100vw - 32px));padding:0;border-radius:12px;z-index:110}
+#modalUnit .modal-head{padding:20px 24px 16px;margin:0;border-bottom:1px solid #e5e7eb}
+#modalUnit>.field{margin:0 24px;padding-top:22px}#modalUnit>.field+button{margin:22px 24px 24px;width:calc(100% - 48px)}
+#modalUnit .field label{color:#2563eb!important;font-weight:400}#modalUnit .field[style*="background"]{background:#f9fafb!important;border-color:#e5e7eb!important;padding:16px!important}
+#modalUnit .gstcard{border-radius:6px}.gstcard.sel{border-color:#3b82f6;background:#eff6ff}.gstcard.sel b{color:#1f2937}
+#btnSaveUnit{height:40px;background:#3b82f6;border-color:#3b82f6;border-radius:5px}
+#modalPreview{width:min(1152px,calc(100vw - 40px));padding:0;border-radius:14px}#modalPreview .modal-head{padding:20px 24px 16px;margin:0;border-bottom:1px solid #e5e7eb}
+#modalPreview .previewwrap{height:228px;margin:16px 24px 0;border-radius:0}#modalPreview .modal-foot{padding:16px 24px;margin:0;border-top:1px solid #e5e7eb}
+.modal{border-radius:10px}.backdrop{background:rgba(17,24,39,.55);backdrop-filter:none}
+
+/* ProductDetails.jsx parity. */
+.crumb{margin:6px 0 24px}.detail-head{margin-bottom:20px}.herocard{border-radius:16px;padding:24px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.hero-gal{width:230px}.hero-main{width:230px;height:208px;border-radius:12px;background:#f9fafb;padding:12px}.hero-info{padding-top:2px}.hero-title-row h2{font-size:1.55rem}
+.hero-price{min-width:220px}.hero-price .val{font-size:2rem}.detail-grid{grid-template-columns:1fr 1fr;gap:20px}.panel{border-radius:16px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.statcards{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.statcard{min-height:132px;flex-direction:column;justify-content:center;text-align:center;background:#fff;border:1px solid #e5e7eb}.statcard .ico{border-radius:999px}
 @media (max-width:900px){
   :root{--topbar-h:44px;--bottombar-h:66px}
   .topbar{padding:0 14px}.topbar h1{display:none}.hamburger{display:flex;border:0;width:28px;height:28px}
@@ -514,6 +545,11 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
   .iconbtn{width:23px;height:23px;border:1px solid #e5e7eb}.iconbtn .i{width:12px;height:12px}
   .bottombar{padding:0;background:#fff}.bb-item{font-size:.58rem;font-weight:500;border-radius:0}.bb-item.center{position:static;top:0}
   .bb-item.center .bb-plus{width:34px;height:27px;border-radius:6px;box-shadow:none;margin:0}.bb-item.center span{color:#10b759}
+  .drawer{left:0;right:0;width:auto!important;min-width:0}.drawer-head{height:110px;padding:20px 18px}.drawer-head .modal-close{right:16px;top:20px}
+  .drawer-body{padding:10px 16px 88px}.drawer-body>.field,.drawer-body>.field-row2>.field{display:block;padding:9px 0}.drawer-body .field>label{display:block;margin-bottom:7px}.drawer-body .field>:not(label){width:100%}
+  .drawer-body .imgslots{grid-template-columns:repeat(4,52px);justify-content:space-between}.drawer-body .imgslot{width:52px;height:52px}.drawer-foot{height:80px;padding:12px 18px}.drawer-foot .btn{height:50px}
+  #modalUnit{width:calc(100vw - 24px);max-height:92vh}#modalUnit .field-row2{grid-template-columns:1fr}.gsttreat{grid-template-columns:1fr}
+  #modalPreview{width:calc(100vw - 20px)}.detail-grid{grid-template-columns:1fr}.hero-gal{width:100%}.hero-main{width:100%;height:220px}.herocard{padding:14px}.statcards{grid-template-columns:repeat(3,minmax(0,1fr))}.statcard{min-height:112px;padding:8px 3px}.statcard span{font-size:.62rem}
 }
 </style>
 </head>
@@ -796,7 +832,7 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
   <div class="previewwrap">
     <table class="pv">
       <thead><tr><th>#</th><th>Category</th><th>Sub Category</th><th>Product</th><th>Price</th><th>Cost price</th><th>Secondary Unit</th><th>Article Number</th><th>Desc</th></tr></thead>
-      <tbody><tr><td>1</td><td>DAIRY</td><td>MILK PRODUCTS</td><td>Whole Milk</td><td class="num">70</td><td class="num">60</td><td>Kg</td><td>RM-MILK-001</td><td>Whole milk used as a base ingredient</td></tr></tbody>
+      <tbody id="previewRows"></tbody>
     </table>
   </div>
   <div class="modal-foot">
@@ -927,7 +963,7 @@ document.body.innerHTML = document.body.innerHTML.replace(/\$\{ICO:([a-z0-9]+)\}
 const IMG = (h)=> `linear-gradient(135deg, hsl(${h} 55% 88%), hsl(${h+30} 45% 72%))`;
 let uid = 100;
 let products = [
-  {id:1,name:'Jamun-11',artNo:'SadWss',category:'Test',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Raj Bakery',hue:340,smallest:'Box',conv:10,tags:[],image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=360&q=82'},
+  {id:1,name:'Jamun-11',artNo:'SadWss',category:'Test',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Testing',hue:340,smallest:'Bottle',conv:10,tags:[],image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=360&q=82'},
   {id:2,name:'Tax Products',artNo:'uQcIcd',category:'Test',price:200,tax:5,taxTreat:'excl',stock:200,canSell:111,inOrders:89,brand:'Raj Bakery',hue:36,smallest:'Box',conv:5,tags:[],image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=360&q=82'},
   {id:3,name:'Img Test',artNo:'i1R3DM',category:'Test',price:10,tax:0,taxTreat:'excl',stock:2500,canSell:2481,inOrders:19,brand:'',hue:200,smallest:'Box',conv:12,tags:[],image:'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=360&q=82'},
   {id:4,name:'Test100001',artNo:'CqnXHL',category:'Test',price:300,tax:0,taxTreat:'excl',stock:300,canSell:287,inOrders:13,brand:'',hue:270,smallest:'Pack',conv:6,tags:[]},
@@ -939,7 +975,7 @@ let products = [
 ];
 // New key prevents the earlier approximation's demo rows from masking this
 // Products.jsx-aligned release for returning reviewers.
-const STORE_KEY = 'foodbridge-products-v2-frontend-parity';
+const STORE_KEY = 'foodbridge-products-v2-frontend-parity-2';
 try {
   const storedProducts = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
   if (Array.isArray(storedProducts) && storedProducts.length) products = storedProducts;
@@ -1309,26 +1345,59 @@ function doExport(kind){
 $$('[data-export]').forEach(b=>b.addEventListener('click', ()=>{ doExport(b.dataset.export); closeAllMenus(); closeSheet('sheetExport'); }));
 
 /* ---------------- import ---------------- */
+const directoryRows = [{category:'DAIRY',subCategory:'MILK PRODUCTS',name:'Whole Milk',price:70,costPrice:60,unit:'Kg',artNo:'RM-MILK-001',description:'Whole milk used as a base ingredient'}];
+let pendingImportRows = [...directoryRows];
+function renderImportPreview(rows = pendingImportRows){
+  $('#previewRows').innerHTML = rows.map((row,index)=>`<tr><td>${index+1}</td><td>${esc(row.category||'Uncategorized')}</td><td>${esc(row.subCategory||'')}</td><td>${esc(row.name||'Untitled Product')}</td><td class="num">${Number(row.price)||0}</td><td class="num">${Number(row.costPrice)||0}</td><td>${esc(row.unit||'Box')}</td><td>${esc(row.artNo||'')}</td><td>${esc(row.description||'')}</td></tr>`).join('');
+  $('#btnDoImport').disabled = rows.length === 0;
+}
+function parseCsv(text){
+  const records=[]; let row=[],cell='',quoted=false;
+  for(let i=0;i<text.length;i++){
+    const char=text[i],next=text[i+1];
+    if(char==='"'&&quoted&&next==='"'){cell+='"';i++;continue;}
+    if(char==='"'){quoted=!quoted;continue;}
+    if(char===','&&!quoted){row.push(cell.trim());cell='';continue;}
+    if((char==='\n'||char==='\r')&&!quoted){if(char==='\r'&&next==='\n')i++;row.push(cell.trim());cell='';if(row.some(Boolean))records.push(row);row=[];continue;}
+    cell+=char;
+  }
+  row.push(cell.trim());if(row.some(Boolean))records.push(row);
+  if(records.length<2)return [];
+  const headers=records.shift().map(value=>value.toLowerCase().replace(/[^a-z0-9]/g,''));
+  const pick=(values,names)=>{const index=headers.findIndex(header=>names.includes(header));return index>=0?values[index]:'';};
+  return records.map(values=>({
+    category:pick(values,['category']),subCategory:pick(values,['subcategory']),name:pick(values,['product','name','title']),
+    price:pick(values,['price','sellingprice','originalprice']),costPrice:pick(values,['costprice','cost']),unit:pick(values,['secondaryunit','unit']),
+    artNo:pick(values,['articlenumber','articleno','artno','sku']),description:pick(values,['desc','description'])
+  })).filter(row=>row.name);
+}
 $('#btnImport').addEventListener('click', e=>{ e.stopPropagation(); toggleMenu('menuImport'); });
 $('#miSelectFile').addEventListener('click', ()=>{ closeAllMenus(); triggerFilePick(); });
-$('#miImportDir').addEventListener('click', ()=>{ closeAllMenus(); toast('Loaded from Directory: Supplier_Catalog_2026'); openModal('modalPreview'); });
+$('#miImportDir').addEventListener('click', ()=>{ closeAllMenus(); pendingImportRows=[...directoryRows];renderImportPreview();toast('Loaded from Directory: Supplier_Catalog_2026'); openModal('modalPreview'); });
 $('#ioSelectFile').addEventListener('click', ()=>{ closeModal('modalImportPick'); triggerFilePick(); });
-$('#ioDirectory').addEventListener('click', ()=>{ closeModal('modalImportPick'); toast('Loaded from Directory: Supplier_Catalog_2026'); openModal('modalPreview'); });
+$('#ioDirectory').addEventListener('click', ()=>{ closeModal('modalImportPick');pendingImportRows=[...directoryRows];renderImportPreview();toast('Loaded from Directory: Supplier_Catalog_2026'); openModal('modalPreview'); });
 
 const fileImportInput = document.createElement('input');
 fileImportInput.type='file'; fileImportInput.accept='.csv,.xlsx,.xls'; fileImportInput.className='hidden';
 document.body.appendChild(fileImportInput);
 function triggerFilePick(){ fileImportInput.value=''; fileImportInput.click(); }
-fileImportInput.addEventListener('change', ()=>{
+fileImportInput.addEventListener('change', async ()=>{
   const f = fileImportInput.files[0];
-  $('#previewSub').textContent = f ? `Parsed “${f.name}” — review before importing` : 'Review parsed rows before importing';
+  if(!f)return;
+  if(f.name.toLowerCase().endsWith('.csv')){
+    pendingImportRows=parseCsv(await f.text());
+  } else {
+    pendingImportRows=[...directoryRows];
+    toast('Excel workbook loaded in compatibility preview','info');
+  }
+  renderImportPreview();
+  $('#previewSub').textContent = `Parsed “${f.name}” — ${pendingImportRows.length} row${pendingImportRows.length===1?'':'s'} ready for review`;
   openModal('modalPreview');
 });
 $('#btnDoImport').addEventListener('click', ()=>{
-  uid++;
-  products.push({id:uid,name:'Whole Milk',artNo:'RM-MILK-001',category:'Dairy',price:70,tax:0,taxTreat:'excl',stock:0,canSell:0,inOrders:0,brand:'',hue:52,smallest:'Kg',conv:1,tags:[]});
+  pendingImportRows.forEach((row,index)=>{uid++;products.push({id:uid,name:row.name||'Untitled Product',artNo:row.artNo||randArt(),category:row.category||'Uncategorized',price:Number(row.price)||0,tax:0,taxTreat:'excl',stock:0,canSell:0,inOrders:0,brand:'',hue:52+index*31,smallest:row.unit||'Box',conv:1,tags:[],description:row.description||''});});
   closeModal('modalPreview');
-  toast('1 product imported');
+  toast(`${pendingImportRows.length} product${pendingImportRows.length===1?'':'s'} imported`);
   navigateTo('list'); render();
 });
 
@@ -1655,6 +1724,22 @@ $('#saExport').addEventListener('click', ()=>{ closeSheet('sheetActions'); openS
 /* ---------------- init ---------------- */
 renderAll();
 navigateTo('list');
+
+// Stable deep links make every important prototype state directly reviewable.
+// Normal navigation remains unchanged when the query parameter is absent.
+const reviewState = new URLSearchParams(location.search).get('state');
+renderImportPreview();
+if(reviewState === 'drawer') openProductDrawer(null);
+if(reviewState === 'unit') { openProductDrawer(null); openModal('modalUnit'); }
+if(reviewState === 'import') openModal('modalImportPick');
+if(reviewState === 'preview') openModal('modalPreview');
+if(reviewState === 'detail') navigateTo('detail', products[0].id);
+if(reviewState === 'gallery') navigateTo('gallery', products[0].id);
+if(reviewState === 'bulk') {
+  selected = new Set(products.map(product => product.id));
+  render();
+  startBulkPriceStock();
+}
 </script>
 </body>
 </html>
