@@ -449,6 +449,18 @@ table.ptable{width:100%;border-collapse:collapse}
 .idir-more{display:block;margin:16px auto;border:0;border-radius:8px;background:#ecfdf3;color:#047857;padding:9px 18px;font-weight:700}.idir-foot{height:60px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;color:#98a2b3;font-size:.85rem}.idir-foot-actions{display:flex;gap:10px}.idir-foot .btn{height:38px;min-height:38px}.idir-foot .btn:disabled{background:#86cfbb;border-color:#86cfbb;color:#fff}
 .idir-file{display:none}
 
+/* ---------- mobile live camera gallery ---------- */
+.mgal{display:none}
+@media (max-width:900px){
+  .mgal{display:block;margin:-2px -2px 0}.mgal-page-title{display:flex;align-items:center;gap:8px;font-size:1.28rem;margin:6px 5px 12px}.mgal-page-title .i{color:#10b759;width:22px;height:22px}
+  .mgal-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden}.mgal-head{min-height:42px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eef0f2}.mgal-title{display:flex;align-items:center;gap:7px;font-weight:750}.mgal-title .i{color:#10b759}.mgal-progress{display:flex;align-items:center;gap:5px;color:#667085;font-size:.65rem}.mgal-dot{width:9px;height:9px;border:2px solid #d0d5dd;border-radius:50%}.mgal-dot.done{border-color:#10b759;background:#10b759}.mgal-dot.current{border-color:#fbbf24;background:#fbbf24}.mgal-gallery-btn{height:28px;padding:0 8px;border:1px solid #d0d5dd;border-radius:7px;background:#fff;color:#475467;font-size:.68rem;display:flex;align-items:center;gap:4px}
+  .mgal-controls{display:grid;grid-template-columns:1fr 1.25fr;gap:10px;padding:10px 16px 5px}.mgal-field label{display:block;color:#667085;font-size:.65rem;margin-bottom:4px}.mgal-field select{width:100%;height:30px;border:1px solid #d0d5dd;border-radius:6px;background:#fff;padding:0 8px;font-size:.7rem}.mgal-lock{padding:2px 16px 10px;color:#98a2b3;font-size:.65rem}.mgal-lock.warn{color:#f97316}.mgal-thumbs{display:flex;gap:7px;padding:7px 14px;min-height:0}.mgal-thumbs:empty{display:none}.mgal-thumb{width:44px;height:44px;border:2px solid #10b759;border-radius:6px;position:relative}.mgal-thumb img{width:100%;height:100%;object-fit:cover;border-radius:4px}.mgal-thumb button{position:absolute;right:-6px;top:-7px;width:16px;height:16px;border:0;border-radius:50%;background:#ef4444;color:#fff;padding:0;font-size:.65rem}.mgal-thumb span{position:absolute;left:-7px;bottom:-7px;width:16px;height:16px;border-radius:50%;background:#10b759;color:#fff;display:grid;place-items:center;font-size:.6rem}
+  .mgal-camera{margin:10px 20px 0;border-radius:9px;overflow:hidden;background:#111;aspect-ratio:1/1;position:relative}.mgal-camera video,.mgal-camera img,.mgal-camera canvas{width:100%;height:100%;object-fit:cover;display:block}.mgal-camera.mirror video{transform:scaleX(-1)}.mgal-camera .mgal-empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:#f8fafc;color:#667085;padding:24px}.mgal-camera .mgal-empty .i{width:36px;height:36px;margin:0 auto 9px;color:#10b759}
+  .mgal-tags{margin:12px 20px 0;padding:11px;border:1px solid #e5e7eb;border-radius:9px;background:#fafbfc}.mgal-tags-title{display:flex;gap:6px;align-items:center;font-size:.72rem;font-weight:750}.mgal-tags-title .i{color:#10b759;width:13px;height:13px}.mgal-tags small{display:block;color:#98a2b3;font-size:.62rem;margin:4px 0 9px}.mgal-tagrow{display:flex;gap:6px}.mgal-tagrow input{flex:1;min-width:0;height:34px;border:1px solid #d0d5dd;border-radius:6px;padding:0 9px}.mgal-tagrow button{height:34px;border:0;border-radius:6px;background:#22c55e;color:#fff;padding:0 12px;font-weight:700}.mgal-tagchips{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.mgal-tagchips span{font-size:.62rem;background:#dcfce7;color:#15803d;padding:3px 7px;border-radius:99px}
+  .mgal-actions{display:flex;justify-content:center;gap:8px;padding:12px 12px 14px;flex-wrap:wrap}.mgal-actions button{min-height:36px;padding:0 12px;border:1px solid #d0d5dd;border-radius:8px;background:#fff;color:#475467;display:flex;align-items:center;gap:5px;font-size:.72rem}.mgal-actions button.primary{background:#22c55e;border-color:#22c55e;color:#fff}.mgal-actions button.outline{border-color:#22c55e;color:#16a34a}.mgal-actions button.save{margin-left:auto;background:#22c55e;border-color:#22c55e;color:#fff}
+  .mphotos-head{display:flex;align-items:center;gap:8px;padding:12px;border-bottom:1px solid #eef0f2}.mphotos-back{border:0;background:none;color:#667085;padding:0}.mphotos-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:10px 14px 20px}.mphoto{aspect-ratio:1;border:1px solid #e5e7eb;border-radius:7px;overflow:hidden;position:relative;padding:0;background:#f4f5f7}.mphoto img{width:100%;height:100%;object-fit:cover}.mphoto::after{content:'';position:absolute;right:7px;top:7px;width:16px;height:16px;border:2px solid #cbd5e1;border-radius:50%;background:#fff}.mphoto.selected::after{border-color:#10b759;background:#10b759;box-shadow:inset 0 0 0 3px #fff}.mphoto-label{position:absolute;left:6px;top:6px;background:#667085;color:#fff;border-radius:99px;padding:2px 7px;font-size:.6rem;font-weight:700}
+}
+
 /* ---------- import preview table ---------- */
 .previewwrap{overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:14px 0}
 table.pv{width:100%;border-collapse:collapse;min-width:640px}
@@ -789,6 +801,9 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
 
       <!-- ============ DETAIL VIEW ============ -->
       <section id="view-detail" class="hidden"></section>
+
+      <!-- ============ MOBILE LIVE CAMERA GALLERY ============ -->
+      <section id="view-gallery" class="hidden"></section>
 
     </div>
   </div>
@@ -1192,10 +1207,12 @@ $('#btnUser').addEventListener('click',(e)=>{ e.stopPropagation(); toggleMenu('m
 
 /* ---------------- navigation between views ---------------- */
 function navigateTo(view, ctx){
-  ['list','detail'].forEach(v=>$('#view-'+v).classList.add('hidden'));
+  ['list','detail','gallery'].forEach(v=>$('#view-'+v).classList.add('hidden'));
+  if(view!=='gallery') stopMobileCamera();
   $('#view-'+view).classList.remove('hidden');
   $$('.navsub .navlink').forEach(n=>n.classList.remove('active'));
   if(view==='list'){ $('#pageTitle').textContent='All Products'; $$('.navsub .navlink')[0].classList.add('active'); renderAll(); }
+  if(view==='gallery'){ $('#pageTitle').textContent='Image Gallery'; renderMobileGallery(); }
   if(view==='detail'){ $('#pageTitle').textContent='Product'; renderDetail(ctx); }
   window.scrollTo({top:0});
 }
@@ -1840,6 +1857,89 @@ function updateDots(){ $('#galDots').innerHTML = [0,1,2,3].map(()=>`<span class=
 function dotAt(i, cls){ const dots = $$('#galDots .dot'); if(dots[i]) dots[i].className='dot '+cls; }
 function updateCount(){ $('#galCount').textContent = `${galleryPhotos}/4 photos`; }
 
+/* ---------------- mobile live camera gallery ---------------- */
+let mobileCameraStream=null;
+let mobileFacingMode='user';
+let mobileCaptures=[];
+let mobileTags=[];
+let mobileGalleryMode='camera';
+function stopMobileCamera(){
+  if(mobileCameraStream){mobileCameraStream.getTracks().forEach(track=>track.stop());mobileCameraStream=null;}
+}
+async function startMobileCamera(){
+  const video=$('#mgalVideo'); if(!video)return;
+  stopMobileCamera();
+  try{
+    mobileCameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:mobileFacingMode},audio:false});
+    video.srcObject=mobileCameraStream;await video.play();
+    $('#mgalEmpty').classList.add('hidden');video.classList.remove('hidden');
+  }catch(error){
+    video.classList.add('hidden');$('#mgalEmpty').classList.remove('hidden');
+    $('#mgalEmpty').innerHTML=`<div>${ICONS.camera}<b style="display:block">Camera access is needed</b><small>Tap here to use your phone camera or choose a photo.</small></div>`;
+  }
+}
+function mobileGalleryShell(){
+  return `<div class="mgal"><h2 class="mgal-page-title">${ICONS.camera}Image Gallery</h2><div class="mgal-card" id="mgalCard"></div><input id="mgalNativeFile" type="file" accept="image/*" capture="environment" class="hidden"><input id="mgalPhotoFile" type="file" accept="image/*" multiple class="hidden"></div>`;
+}
+function renderMobileGallery(){
+  const wrap=$('#view-gallery');wrap.innerHTML=mobileGalleryShell();
+  mobileGalleryMode='camera';renderMobileCameraPanel();
+  $('#mgalNativeFile').addEventListener('change',event=>readMobileFiles(event.target.files));
+  $('#mgalPhotoFile').addEventListener('change',event=>readMobileFiles(event.target.files));
+}
+function renderMobileCameraPanel(){
+  mobileGalleryMode='camera';
+  const format=mobileStorage.format||'1/1',resolution=mobileStorage.resolution||'1028';
+  $('#mgalCard').innerHTML=`
+    <div class="mgal-head"><div class="mgal-title">${ICONS.camera}Image Gallery</div><div class="mgal-progress">${[0,1,2,3].map(i=>`<span class="mgal-dot ${i<mobileCaptures.length?'done':i===mobileCaptures.length?'current':''}"></span>`).join('')}<span>${mobileCaptures.length}/4 photos</span><button class="mgal-gallery-btn" id="mgalOpenPhotos">${ICONS.layers}Gallery</button></div></div>
+    <div class="mgal-controls"><div class="mgal-field"><label>Image Format</label><select id="mgalFormat" ${mobileCaptures.length?'disabled':''}><option value="1/1" ${format==='1/1'?'selected':''}>Square (1:1)</option><option value="4/5" ${format==='4/5'?'selected':''}>Portrait (4:5)</option><option value="16/9" ${format==='16/9'?'selected':''}>Landscape (16:9)</option></select></div><div class="mgal-field"><label>Resolution</label><select id="mgalResolution" ${mobileCaptures.length?'disabled':''}><option value="768" ${resolution==='768'?'selected':''}>Standard (768 px)</option><option value="1028" ${resolution==='1028'?'selected':''}>Standard+ (1028 px)</option><option value="2048" ${resolution==='2048'?'selected':''}>High (2048 px)</option></select></div></div>
+    <div class="mgal-lock ${mobileCaptures.length?'warn':''}" id="mgalLock">${resolution} × ${resolution} px &nbsp; ${mobileCaptures.length?'Format and resolution locked until save':'Locks after the first capture'}</div>
+    <div class="mgal-thumbs">${mobileCaptures.map((photo,index)=>`<div class="mgal-thumb"><img src="${photo.src}" alt="Capture ${index+1}"><button data-mgal-remove="${index}">×</button><span>${index+1}</span></div>`).join('')}</div>
+    <div class="mgal-camera ${mobileFacingMode==='user'?'mirror':''}" id="mgalCamera" style="aspect-ratio:${format.replace('/', '/')} "><video id="mgalVideo" class="${mobileCaptures.length?'hidden':''}" playsinline autoplay muted></video><div class="mgal-empty hidden" id="mgalEmpty"></div><img id="mgalCaptured" class="${mobileCaptures.length?'':'hidden'}" src="${mobileCaptures.length?mobileCaptures[mobileCaptures.length-1].src:''}" alt="Latest capture"><canvas id="mgalCanvas" class="hidden"></canvas></div>
+    ${mobileCaptures.length?`<div class="mgal-tags"><div class="mgal-tags-title">${ICONS.tag}Image Tags</div><small>Add one or more tags for these photos</small><div class="mgal-tagrow"><input id="mgalTagInput" placeholder="Add tag"><button id="mgalAddTag">Add</button></div><div class="mgal-tagchips">${mobileTags.map(tag=>`<span>${esc(tag)}</span>`).join('')}</div></div>`:''}
+    <div class="mgal-actions">${mobileCaptures.length?`<button id="mgalRetake">${ICONS.undo}Retake</button><button class="outline" id="mgalAnother">${ICONS.camera}Take Another</button><button class="outline" id="mgalCrop">${ICONS.crop}Crop</button><button class="save" id="mgalSave">✓ Save &amp; Next Product →</button>`:`<button id="mgalFlip">${ICONS.flip}Flip</button><button class="primary" id="mgalCapture">${ICONS.camera}Capture</button>`}</div>`;
+  $('#mgalOpenPhotos').addEventListener('click',renderMyPhotos);
+  $('#mgalFormat').addEventListener('change',event=>{mobileStorage.format=event.target.value;renderMobileCameraPanel();});
+  $('#mgalResolution').addEventListener('change',event=>{mobileStorage.resolution=event.target.value;renderMobileCameraPanel();});
+  $$('[data-mgal-remove]').forEach(button=>button.addEventListener('click',()=>{mobileCaptures.splice(Number(button.dataset.mgalRemove),1);renderMobileCameraPanel();}));
+  if(mobileCaptures.length){
+    stopMobileCamera();
+    $('#mgalAddTag').addEventListener('click',()=>{const value=$('#mgalTagInput').value.trim();if(value){mobileTags.push(value);renderMobileCameraPanel();}});
+    $('#mgalRetake').addEventListener('click',()=>{mobileCaptures.pop();renderMobileCameraPanel();});
+    $('#mgalAnother').addEventListener('click',()=>{if(mobileCaptures.length>=4){toast('Maximum 4 photos');return;}$('#mgalCaptured').classList.add('hidden');$('#mgalVideo').classList.remove('hidden');startMobileCamera();});
+    $('#mgalCrop').addEventListener('click',cropLatestMobileCapture);
+    $('#mgalSave').addEventListener('click',saveMobileCaptures);
+  }else{
+    $('#mgalFlip').addEventListener('click',()=>{mobileFacingMode=mobileFacingMode==='user'?'environment':'user';startMobileCamera();});
+    $('#mgalCapture').addEventListener('click',captureMobileFrame);
+    $('#mgalEmpty').addEventListener('click',()=>$('#mgalNativeFile').click());
+    startMobileCamera();
+  }
+}
+const mobileStorage={format:'1/1',resolution:'1028'};
+function captureMobileFrame(){
+  const video=$('#mgalVideo');
+  if(!video||!video.videoWidth){$('#mgalNativeFile').click();return;}
+  const canvas=$('#mgalCanvas'),size=Number(mobileStorage.resolution),ratio=mobileStorage.format.split('/').map(Number),width=ratio[0]>=ratio[1]?size:Math.round(size*ratio[0]/ratio[1]),height=ratio[1]>=ratio[0]?size:Math.round(size*ratio[1]/ratio[0]);
+  canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');
+  if(mobileFacingMode==='user'){ctx.translate(width,0);ctx.scale(-1,1);}ctx.drawImage(video,0,0,width,height);
+  mobileCaptures.push({src:canvas.toDataURL('image/jpeg',.9),tags:[...mobileTags]});stopMobileCamera();renderMobileCameraPanel();
+}
+function readMobileFiles(files){[...files].slice(0,4-mobileCaptures.length).forEach(file=>{const reader=new FileReader();reader.onload=()=>{mobileCaptures.push({src:reader.result,tags:[]});renderMobileCameraPanel();};reader.readAsDataURL(file);});}
+function cropLatestMobileCapture(){
+  const latest=mobileCaptures[mobileCaptures.length-1];if(!latest)return;const img=new Image();img.onload=()=>{const canvas=document.createElement('canvas'),side=Math.min(img.width,img.height);canvas.width=canvas.height=side;canvas.getContext('2d').drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,side,side);latest.src=canvas.toDataURL('image/jpeg',.9);toast('Photo cropped to square');renderMobileCameraPanel();};img.src=latest.src;
+}
+function saveMobileCaptures(){
+  mobileCaptures.forEach((capture,index)=>{if(products[index]){products[index].image=capture.src;products[index].noThumb=false;products[index].tags=[...new Set([...(products[index].tags||[]),...mobileTags])];}});persistProducts();toast(`${mobileCaptures.length} photo${mobileCaptures.length===1?'':'s'} saved`);mobileCaptures=[];mobileTags=[];navigateTo('list');
+}
+function renderMyPhotos(){
+  stopMobileCamera();mobileGalleryMode='photos';
+  const photos=[...mobileCaptures,...products.filter(product=>product.image).map(product=>({src:product.image,label:product.name}))];
+  $('#mgalCard').innerHTML=`<div class="mphotos-head"><button class="mphotos-back" id="mphotosBack">← Back</button>${ICONS.layers}<b>My Photos</b></div><div class="idir-chips" style="padding:10px 14px 0"><button class="idir-chip active">All ${photos.length}</button><button class="idir-chip">testing ${Math.min(8,photos.length)}</button><button class="idir-chip">check 2</button><button class="idir-chip">dev 2</button></div><div class="mphotos-grid">${photos.map((photo,index)=>`<button class="mphoto" data-mphoto="${index}"><img src="${photo.src}" alt="${esc(photo.label||'My photo')}"><span class="mphoto-label">testing</span></button>`).join('')}</div>`;
+  $('#mphotosBack').addEventListener('click',renderMobileCameraPanel);
+  $$('[data-mphoto]').forEach(button=>button.addEventListener('click',()=>{button.classList.toggle('selected');const photo=photos[Number(button.dataset.mphoto)];if(button.classList.contains('selected')&&!mobileCaptures.some(item=>item.src===photo.src))mobileCaptures.push({src:photo.src,tags:[]});}));
+}
+
 /* ---------------- Foodbridge image directory modal ---------------- */
 const directoryGroups = ['All','testing','check','dev','Testt-dev','Lemon','Test-siblings'];
 let imageDirectoryTab = 'global';
@@ -1908,7 +2008,7 @@ $('#btnImageDirectory').addEventListener('click',()=>openImageDirectory('local')
 
 /* ---------------- mobile bottom bar / sheets ---------------- */
 $('#bbImportExport').addEventListener('click', ()=> openSheet('sheetActions'));
-$('#bbImages').addEventListener('click', ()=> openImageDirectory('global'));
+$('#bbImages').addEventListener('click', ()=> matchMedia('(max-width:900px)').matches?navigateTo('gallery'):openImageDirectory('global'));
 $('#bbBulk').addEventListener('click', ()=>{ if(selected.size===0){ toast('Select products first','alert'); return;} openSheet('sheetBulk'); });
 $('#bbSheet').addEventListener('click', ()=> toast('Opening connected Google Sheet…'));
 $('#btnSheet').addEventListener('click', ()=> toast('Opening connected Google Sheet…'));
@@ -1928,7 +2028,9 @@ if(reviewState === 'unit') { openProductDrawer(null); openModal('modalUnit'); }
 if(reviewState === 'import') openModal('modalImportPick');
 if(reviewState === 'preview') openModal('modalPreview');
 if(reviewState === 'detail') navigateTo('detail', products[0].id);
-if(reviewState === 'gallery' || reviewState === 'images') openImageDirectory('global');
+if(reviewState === 'gallery' || reviewState === 'camera') navigateTo('gallery');
+if(reviewState === 'camera-captured') { mobileCaptures=[{src:products[0].image,tags:[]}]; navigateTo('gallery'); }
+if(reviewState === 'images') openImageDirectory('global');
 if(reviewState === 'images-local') openImageDirectory('local');
 if(reviewState === 'bulk') {
   selected = new Set(products.map(product => product.id));
