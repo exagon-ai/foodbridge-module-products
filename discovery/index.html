@@ -114,22 +114,20 @@
     same way they can in the As-is reference screens — on desktop <em>and</em> mobile?</p>
 
     <div class="canonical-card">
-      <span class="badge">Canonical · Addendum 004</span>
-      <h3>Full Product Module — list · detail · modals for everything else</h3>
-      <p>Only two real pages: All Products and Product Detail (the As-is address bar never changes
-      for anything else). Add/Edit/Delete/Import are all modals opened over whichever page you're
-      on · full As-is field set + a nested Unit &amp; Price sub-modal (smallest/base unit,
-      conversion, GST, derived pricing) · list search, clearable category filter, pagination, bulk
-      select + Bulk Delete, Export/Import/Sample menus · Product Detail with Packaging &amp; Units,
-      Inventory Summary, gallery/lightbox and More Actions · one responsive screen set, not a
-      separate mobile build (design-principles.md §Decisions).</p>
+      <span class="badge">Current release · Version 2</span>
+      <h3>Responsive Product Workspace — desktop and mobile</h3>
+      <p>Version 2 mirrors the current Foodbridge Products experience across desktop tables and
+      mobile product cards. It includes search and category filters, selection and bulk actions,
+      direct price and stock editing, tags, product detail, add/edit drawer, Unit &amp; Price,
+      product-image gallery, import preview, downloadable CSV/Excel export, dark mode, and locally
+      persistent demo data. Both launch actions below open this same responsive V2 experience.</p>
       <div class="btn-row">
-        <a class="btn btn-primary" href="screens/screen-01.html">Open desktop →</a>
-        <button class="btn btn-secondary" id="btn-open-mobile" type="button">📱 Open mobile →</button>
+        <a class="btn btn-primary" href="preview/v2.html">Open V2 desktop →</a>
+        <button class="btn btn-secondary" id="btn-open-v2-mobile-hero" type="button">📱 Open V2 mobile →</button>
       </div>
     </div>
 
-    <h2>Screens</h2>
+    <h2>Previous version (V1)</h2>
     <div class="screen-grid">
       <a class="screen-card" href="screens/screen-01.html">
         <span class="step-badge">Screen 01</span>
@@ -144,24 +142,6 @@
     </div>
     <p class="note" style="margin-top:0.85rem;">Add Product, Update Product, and Import's Preview
     Product step are modals launched from the screens above — not separate pages (Addendum 004).</p>
-
-    <h2>Versions</h2>
-    <div class="screen-grid">
-      <a class="screen-card" href="screens/screen-01.html">
-        <span class="step-badge">Version 1 · As-is baseline</span>
-        <h4>Original product module</h4>
-        <p>The preserved reference implementation for comparing the established desktop and responsive flows.</p>
-      </a>
-      <a class="screen-card" href="preview/v2.html" style="border-color:var(--green);box-shadow:0 4px 14px rgba(26,157,91,.12)">
-        <span class="step-badge" style="background:var(--green);color:#fff">Version 2 · New</span>
-        <h4>Responsive product workspace</h4>
-        <p>Desktop tables and mobile cards, real product imagery, gallery capture, imports with preview, actual CSV/Excel export, inline editing, bulk actions, add/edit drawer and persistent demo data.</p>
-      </a>
-    </div>
-    <div class="btn-row" style="margin-top:1rem">
-      <a class="btn btn-primary" href="preview/v2.html">Open V2 desktop →</a>
-      <button class="btn btn-secondary" id="btn-open-v2-mobile" type="button">📱 Open V2 mobile →</button>
-    </div>
 
     <h2>Source material</h2>
     <div class="ref-row">
@@ -223,10 +203,7 @@
     // "Open mobile" launches the same responsive screen in a phone-sized popup window so the
     // existing @media (max-width: 760px) rules in shared.css genuinely engage — there is no
     // separate mobile build (Addendum 003 D7), this just previews the same screens narrow.
-    document.getElementById('btn-open-mobile').addEventListener('click', () => {
-      window.open('screens/screen-01.html', 'fbp-mobile-preview', 'width=390,height=844');
-    });
-    document.getElementById('btn-open-v2-mobile').addEventListener('click', () => {
+    document.getElementById('btn-open-v2-mobile-hero').addEventListener('click', () => {
       window.open('preview/v2.html', 'fbp-v2-mobile-preview', 'width=390,height=844');
     });
   </script>

@@ -472,13 +472,56 @@ table.pv{width:100%;border-collapse:collapse;min-width:640px}
   .metagrid{grid-template-columns:repeat(2,1fr)}
   .gal-actions.three{grid-template-columns:1fr 1fr}
 }
+
+/* Products.jsx fidelity layer: mirrors the production page's Windmill/Tailwind shell. */
+:root{
+  --bg:#f4f5f7;--surface:#fff;--surface-2:#f9fafb;--surface-3:#f3f4f6;
+  --border:#e5e7eb;--border-strong:#d1d5db;--text:#111827;--text-muted:#4b5563;
+  --text-faint:#9ca3af;--accent:#10b759;--accent-hover:#0e9f4f;--accent-soft:#ecfdf3;
+  --warn:#f97316;--danger:#ef4444;--sidebar-w:256px;--topbar-h:64px;
+  --radius-sm:6px;--radius-md:8px;--radius-lg:10px;
+}
+.sidebar{padding:14px 12px 18px;gap:14px}.brand{height:49px;padding:0 7px 12px;border-bottom:1px solid var(--border)}
+.brand-mark{width:26px;height:26px;border-radius:5px}.brand-mark .i{width:15px;height:15px}
+.navlink{border-radius:7px;padding:9px 12px;font-weight:500}.navlink.active{font-weight:500}
+.navsub{border:0;margin:0 0 8px 32px;padding-left:0}.navsub .navlink{padding:6px 12px}
+.topbar{padding:0 32px;background:#fff;backdrop-filter:none}.topbar h1{font-size:1rem;color:#374151}
+#btnTheme{display:none}.userchip .avatar{background:#13bd63;color:#fff;border:2px solid #d1fae5}
+.content{max-width:none;padding:40px 24px}.toolbar{margin-bottom:24px}.toolbar-group{gap:12px}
+.btn{height:40px;padding:0 14px;border-radius:6px;font-weight:500;background:#fff}
+.btn-primary{background:#16a34a}.searchrow{gap:8px;margin-bottom:8px}.search-wrap{max-width:none}
+.search-wrap input,.selfield select{height:40px;border-radius:6px}.selfield select{min-width:192px}
+.chipsrow.mobile-only{display:none}
+.tablewrap{border-radius:8px}.ptable thead th{height:48px;background:#fff;padding:12px 16px;color:#6b7280;letter-spacing:0}
+.ptable tbody td{height:61px;padding:8px 16px}.prodname{font-size:1rem;font-weight:500}.prodmeta{color:#6b7280}
+.catpill{padding:0;border:0;background:transparent;border-radius:0;color:#111827;font-size:.875rem;font-weight:400}
+.thumb{border-radius:0;width:44px!important;height:44px!important}.pricecell b{font-size:.875rem}.stockcell .total{font-size:.875rem}
+.iconbtn{width:28px;height:28px;border:0;border-radius:5px;color:#374151}.foot{height:76px;padding:16px 32px}.pagebtn{border:0}
+.pagebtn.active{border-radius:6px;background:#17bd59}
+@media (max-width:900px){
+  :root{--topbar-h:44px;--bottombar-h:66px}
+  .topbar{padding:0 14px}.topbar h1{display:none}.hamburger{display:flex;border:0;width:28px;height:28px}
+  .content{padding:12px 10px calc(var(--bottombar-h) + 18px)}
+  #view-list::before{content:'◇  All Products';display:block;margin:0 0 12px 8px;color:#1f2937;font-size:1.2rem;font-weight:750}
+  .searchrow{margin:0 0 10px}.search-wrap input{height:38px}.chipsrow.mobile-only{display:flex;margin:0 0 16px;gap:8px}
+  .chip{padding:6px 14px;font-weight:500}.pcard{height:120px;overflow:hidden;border-radius:10px;padding:7px 8px 0;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .pcard-top{gap:7px}.pcard .chk{margin-top:1px}.pcard-thumb{width:66px!important;height:66px!important;border-radius:6px}
+  .pcard-name{font-size:.82rem}.pcard-art{font-size:.65rem}.badge{font-size:.59rem;padding:3px 7px}
+  .pcard-mid{margin-top:2px}.pcard-mid .catpill{padding:1px 4px;background:#ecfdf3;color:#10b759;font-size:.62rem}
+  .pcard-price{font-size:.9rem}.pcard-tax{font-size:.6rem}.pcard-stats{position:absolute;left:38px;right:108px;bottom:5px;margin:0;padding:3px 0;background:transparent;border-top:1px solid #f3f4f6;border-radius:0;gap:0}
+  .pcard-stats div{border-right:1px solid #f3f4f6}.pcard-stats div:last-child{border-right:0}.pcard-stats b{font-size:.72rem}.pcard-stats span{font-size:.55rem;text-transform:none}
+  .pcard-actions{position:absolute;right:7px;bottom:7px;margin:0;padding:0;border:0}.pcard{position:relative}.pcard-body{padding-bottom:0}
+  .iconbtn{width:23px;height:23px;border:1px solid #e5e7eb}.iconbtn .i{width:12px;height:12px}
+  .bottombar{padding:0;background:#fff}.bb-item{font-size:.58rem;font-weight:500;border-radius:0}.bb-item.center{position:static;top:0}
+  .bb-item.center .bb-plus{width:34px;height:27px;border-radius:6px;box-shadow:none;margin:0}.bb-item.center span{color:#10b759}
+}
 </style>
 </head>
 <body>
 
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><span class="brand-mark">RB</span> RAJ BAKERY</div>
+    <div class="brand"><span class="brand-mark">${ICO:bag}</span> RAJ BAKERY</div>
     <nav class="navgroup">
       <button class="navlink" data-toast="Dashboard">${ICO:grid}Dashboard</button>
       <button class="navlink active" data-nav>${ICO:box}Products</button>
@@ -884,9 +927,9 @@ document.body.innerHTML = document.body.innerHTML.replace(/\$\{ICO:([a-z0-9]+)\}
 const IMG = (h)=> `linear-gradient(135deg, hsl(${h} 55% 88%), hsl(${h+30} 45% 72%))`;
 let uid = 100;
 let products = [
-  {id:1,name:'Jamun Preserve',artNo:'SadWss',category:'Preserves',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Raj Bakery',hue:340,smallest:'Bottle',conv:10,tags:['Bestseller'],image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=360&q=82'},
-  {id:2,name:'Artisan Sourdough',artNo:'uQcIcd',category:'Bakery',price:200,tax:5,taxTreat:'excl',stock:200,canSell:111,inOrders:89,brand:'Raj Bakery',hue:36,smallest:'Piece',conv:5,tags:['Fresh'],image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=360&q=82'},
-  {id:3,name:'Whole Milk',artNo:'i1R3DM',category:'Dairy',price:70,tax:0,taxTreat:'excl',stock:2500,canSell:2481,inOrders:19,brand:'Local Dairy',hue:200,smallest:'Litre',conv:12,tags:['Chilled'],image:'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=360&q=82'},
+  {id:1,name:'Jamun-11',artNo:'SadWss',category:'Test',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Raj Bakery',hue:340,smallest:'Box',conv:10,tags:[],image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=360&q=82'},
+  {id:2,name:'Tax Products',artNo:'uQcIcd',category:'Test',price:200,tax:5,taxTreat:'excl',stock:200,canSell:111,inOrders:89,brand:'Raj Bakery',hue:36,smallest:'Box',conv:5,tags:[],image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=360&q=82'},
+  {id:3,name:'Img Test',artNo:'i1R3DM',category:'Test',price:10,tax:0,taxTreat:'excl',stock:2500,canSell:2481,inOrders:19,brand:'',hue:200,smallest:'Box',conv:12,tags:[],image:'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=360&q=82'},
   {id:4,name:'Test100001',artNo:'CqnXHL',category:'Test',price:300,tax:0,taxTreat:'excl',stock:300,canSell:287,inOrders:13,brand:'',hue:270,smallest:'Pack',conv:6,tags:[]},
   {id:5,name:'Abc',artNo:'SadsLL',category:'Test',price:100,tax:18,taxTreat:'excl',stock:200,canSell:200,inOrders:0,brand:'',hue:150,smallest:'Piece',conv:4,tags:[],noThumb:true},
   {id:6,name:'Abc11',artNo:'uQcIKKS',category:'Test',price:1000,tax:5,taxTreat:'excl',stock:2000,canSell:2000,inOrders:0,brand:'',hue:40,smallest:'Kg',conv:20,tags:[],noThumb:true},
@@ -894,7 +937,9 @@ let products = [
   {id:8,name:'Test100001',artNo:'CqnSjj',category:'Test',price:200,tax:0,taxTreat:'excl',stock:95,canSell:95,inOrders:0,brand:'',hue:180,smallest:'Piece',conv:2,tags:[],noThumb:true},
   {id:9,name:'Product-002',artNo:'jkpt0Q',category:'Jjkjkj',price:200,tax:12,taxTreat:'excl',stock:0,canSell:0,inOrders:0,brand:'',hue:10,smallest:'Piece',conv:8,tags:[],noThumb:true},
 ];
-const STORE_KEY = 'foodbridge-products-v2';
+// New key prevents the earlier approximation's demo rows from masking this
+// Products.jsx-aligned release for returning reviewers.
+const STORE_KEY = 'foodbridge-products-v2-frontend-parity';
 try {
   const storedProducts = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
   if (Array.isArray(storedProducts) && storedProducts.length) products = storedProducts;
