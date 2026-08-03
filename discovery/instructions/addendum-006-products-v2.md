@@ -35,3 +35,7 @@ V2 is a fully clickable static prototype covering list/search/filter, responsive
 bulk update/tag/delete/edit, per-row/per-card inline edit, add/edit drawer, pricing modal, product
 detail, gallery capture/tag flow, import preview, downloadable export, theme switch, and locally
 persistent product/image data.
+
+Release verification on 2026-08-03 covered 1440 × 1000 desktop and 390 × 844 mobile renders.
+The V2 document shell was finalized with explicit UTF-8, responsive viewport, language and theme
+metadata so Indian currency and punctuation render correctly in the deployed static page.
