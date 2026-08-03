@@ -145,13 +145,22 @@
     <p class="note" style="margin-top:0.85rem;">Add Product, Update Product, and Import's Preview
     Product step are modals launched from the screens above — not separate pages (Addendum 004).</p>
 
-    <div class="ref-card" style="margin-top:1.5rem; border-color:#d8dce1;">
-      <span class="step-badge">Exploration · not canonical</span>
-      <a href="preview/v2.html">V2 preview →</a>
-      <p class="note" style="margin-top:0.4rem;">A fast, self-contained UX exploration of a "V2"
-      products module (single file, no shared.css/js/seed.json, nothing persisted). Sits outside
-      the addendum-governed screens above — if a direction here is adopted, it gets folded into
-      screen-01/03 properly, with its own addendum, not linked from SSOT work.</p>
+    <h2>Versions</h2>
+    <div class="screen-grid">
+      <a class="screen-card" href="screens/screen-01.html">
+        <span class="step-badge">Version 1 · As-is baseline</span>
+        <h4>Original product module</h4>
+        <p>The preserved reference implementation for comparing the established desktop and responsive flows.</p>
+      </a>
+      <a class="screen-card" href="preview/v2.html" style="border-color:var(--green);box-shadow:0 4px 14px rgba(26,157,91,.12)">
+        <span class="step-badge" style="background:var(--green);color:#fff">Version 2 · New</span>
+        <h4>Responsive product workspace</h4>
+        <p>Desktop tables and mobile cards, real product imagery, gallery capture, imports with preview, actual CSV/Excel export, inline editing, bulk actions, add/edit drawer and persistent demo data.</p>
+      </a>
+    </div>
+    <div class="btn-row" style="margin-top:1rem">
+      <a class="btn btn-primary" href="preview/v2.html">Open V2 desktop →</a>
+      <button class="btn btn-secondary" id="btn-open-v2-mobile" type="button">📱 Open V2 mobile →</button>
     </div>
 
     <h2>Source material</h2>
@@ -216,6 +225,9 @@
     // separate mobile build (Addendum 003 D7), this just previews the same screens narrow.
     document.getElementById('btn-open-mobile').addEventListener('click', () => {
       window.open('screens/screen-01.html', 'fbp-mobile-preview', 'width=390,height=844');
+    });
+    document.getElementById('btn-open-v2-mobile').addEventListener('click', () => {
+      window.open('preview/v2.html', 'fbp-v2-mobile-preview', 'width=390,height=844');
     });
   </script>
 </body>

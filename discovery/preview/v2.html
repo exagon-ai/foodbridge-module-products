@@ -1,13 +1,8 @@
 <title>Products — Raj Bakery · V2</title>
 <!--
-  V2 EXPLORATION PREVIEW — not the canonical discovery iteration.
-  This is a fast, self-contained UX exploration of a "V2" products module
-  (desktop + mobile responsive, single file, no shared.css/js/seed.json,
-  no localStorage persistence). It sits alongside — and does not replace —
-  the addendum-governed prototype at discovery/screens/screen-01.html and
-  screen-03.html. If any direction here gets adopted, it should be folded
-  into that canonical structure with a proper addendum, not linked to
-  directly from SSOT work.
+  FOODBRIDGE PRODUCTS V2 — responsive, clickable discovery release.
+  This remains independent of V1 so both versions can be reviewed from the
+  discovery landing page. Data and uploaded product images persist locally.
 -->
 <style>
 :root{
@@ -881,9 +876,9 @@ document.body.innerHTML = document.body.innerHTML.replace(/\$\{ICO:([a-z0-9]+)\}
 const IMG = (h)=> `linear-gradient(135deg, hsl(${h} 55% 88%), hsl(${h+30} 45% 72%))`;
 let uid = 100;
 let products = [
-  {id:1,name:'Jamun-11',artNo:'SadWss',category:'Test',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Testing',hue:340,smallest:'Bottle',conv:10,tags:[]},
-  {id:2,name:'Tax Products',artNo:'uQcIcd',category:'Test',price:200,tax:5,taxTreat:'excl',stock:200,canSell:111,inOrders:89,brand:'',hue:200,smallest:'Piece',conv:5,tags:[]},
-  {id:3,name:'Img Test',artNo:'i1R3DM',category:'Test',price:10,tax:0,taxTreat:'excl',stock:2500,canSell:2481,inOrders:19,brand:'',hue:20,smallest:'Piece',conv:1,tags:[],noThumb:true},
+  {id:1,name:'Jamun Preserve',artNo:'SadWss',category:'Preserves',price:500,tax:18,taxTreat:'excl',stock:200,canSell:76,inOrders:123,brand:'Raj Bakery',hue:340,smallest:'Bottle',conv:10,tags:['Bestseller'],image:'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=360&q=82'},
+  {id:2,name:'Artisan Sourdough',artNo:'uQcIcd',category:'Bakery',price:200,tax:5,taxTreat:'excl',stock:200,canSell:111,inOrders:89,brand:'Raj Bakery',hue:36,smallest:'Piece',conv:5,tags:['Fresh'],image:'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=360&q=82'},
+  {id:3,name:'Whole Milk',artNo:'i1R3DM',category:'Dairy',price:70,tax:0,taxTreat:'excl',stock:2500,canSell:2481,inOrders:19,brand:'Local Dairy',hue:200,smallest:'Litre',conv:12,tags:['Chilled'],image:'https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=360&q=82'},
   {id:4,name:'Test100001',artNo:'CqnXHL',category:'Test',price:300,tax:0,taxTreat:'excl',stock:300,canSell:287,inOrders:13,brand:'',hue:270,smallest:'Pack',conv:6,tags:[]},
   {id:5,name:'Abc',artNo:'SadsLL',category:'Test',price:100,tax:18,taxTreat:'excl',stock:200,canSell:200,inOrders:0,brand:'',hue:150,smallest:'Piece',conv:4,tags:[],noThumb:true},
   {id:6,name:'Abc11',artNo:'uQcIKKS',category:'Test',price:1000,tax:5,taxTreat:'excl',stock:2000,canSell:2000,inOrders:0,brand:'',hue:40,smallest:'Kg',conv:20,tags:[],noThumb:true},
@@ -891,6 +886,14 @@ let products = [
   {id:8,name:'Test100001',artNo:'CqnSjj',category:'Test',price:200,tax:0,taxTreat:'excl',stock:95,canSell:95,inOrders:0,brand:'',hue:180,smallest:'Piece',conv:2,tags:[],noThumb:true},
   {id:9,name:'Product-002',artNo:'jkpt0Q',category:'Jjkjkj',price:200,tax:12,taxTreat:'excl',stock:0,canSell:0,inOrders:0,brand:'',hue:10,smallest:'Piece',conv:8,tags:[],noThumb:true},
 ];
+const STORE_KEY = 'foodbridge-products-v2';
+try {
+  const storedProducts = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+  if (Array.isArray(storedProducts) && storedProducts.length) products = storedProducts;
+} catch (_) { /* keep the safe demo seed */ }
+function persistProducts(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(products)); } catch (_) { /* storage may be unavailable */ }
+}
 let selected = new Set();
 let bulkEditMode = false;
 let rowEditingId = null;
@@ -1006,6 +1009,7 @@ function filtered(){
 /* ---------------- render list ---------------- */
 function thumbHtml(p, size){
   if(p.noThumb) return `<div class="thumb" style="width:${size}px;height:${size}px">${ICONS.boxstack}</div>`;
+  if(p.image) return `<div class="thumb" style="width:${size}px;height:${size}px"><img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy"></div>`;
   return `<div class="thumb" style="width:${size}px;height:${size}px;background:${IMG(p.hue)}"></div>`;
 }
 function tagsHtml(p){ return p.tags && p.tags.length ? p.tags.map(t=>`<span class="tagchip">${esc(t)}</span>`).join('') : ''; }
@@ -1160,7 +1164,7 @@ $('#selectAll').addEventListener('change', e=>{
 });
 $('#bulkClear').addEventListener('click', ()=>{ selected.clear(); render(); });
 
-function render(){ renderRows(); renderCards(); syncSelectionUI(); }
+function render(){ persistProducts(); renderRows(); renderCards(); syncSelectionUI(); }
 function renderAll(){ refreshCategoryOptions(); render(); }
 
 /* ---------------- bulk edit price & stock ---------------- */
@@ -1321,6 +1325,7 @@ function openProductDrawer(id){
     $('#drawerTitle').textContent='Edit Product';
     $('#saveBtnLabel').textContent='Save Changes';
     $('#fArtNo').value=p.artNo; $('#fName').value=p.name; $('#fCategory').value=p.category; $('#fBrand').value=p.brand||'';
+    drawerImages = [p.image||null,null,null,null]; renderImgSlots();
     pendingUnit = {smallest:p.smallest, conv:p.conv, gst:p.tax, treat:p.taxTreat==='excl'?'excl':'incl', priceUnit:(p.price/p.conv).toFixed(2), priceBox:p.price};
     updateUnitSummary();
     $('#priceLbl').textContent='Price (Box)'; $('#stockLbl').textContent='Opening Stock (Box)';
@@ -1341,7 +1346,8 @@ $('#btnSaveProduct').addEventListener('click', ()=>{
     Object.assign(currentEditProduct, {
       name, category:cat, artNo:$('#fArtNo').value||currentEditProduct.artNo, brand:$('#fBrand').value,
       price:Number($('#fPrice').value)||0, stock:Number($('#fStock').value)||0,
-      tax:pendingUnit.gst, taxTreat: pendingUnit.treat==='excl'?'excl':'incl', smallest:pendingUnit.smallest, conv:pendingUnit.conv
+      tax:pendingUnit.gst, taxTreat: pendingUnit.treat==='excl'?'excl':'incl', smallest:pendingUnit.smallest, conv:pendingUnit.conv,
+      image:drawerImages[0]||currentEditProduct.image, noThumb:!drawerImages[0]
     });
     toast('Product updated');
   } else {
@@ -1351,7 +1357,7 @@ $('#btnSaveProduct').addEventListener('click', ()=>{
       price:Number($('#fPrice').value)||0, tax:pendingUnit.gst, taxTreat: pendingUnit.treat==='excl'?'excl':'incl',
       stock:Number($('#fStock').value)||0, canSell:Number($('#fStock').value)||0, inOrders:0,
       hue: Math.floor(Math.random()*360), smallest:pendingUnit.smallest, conv:pendingUnit.conv, tags:[],
-      noThumb: !drawerImages[0]
+      image:drawerImages[0]||null, noThumb: !drawerImages[0]
     });
     toast('Product added');
   }
@@ -1430,8 +1436,8 @@ function renderDetail(id){
     </div>
     <div class="herocard">
       <div class="hero-gal">
-        <div class="hero-main" id="heroMain">${p.noThumb?`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-faint)">${ICONS.boxstack}</div>`:`<div style="width:100%;height:100%;background:${IMG(p.hue)}"></div>`}</div>
-        <div class="hero-thumbs">${[0,1,2,3].map(i=>`<button class="${i===0?'active':''}" data-thumb="${i}"><div style="width:100%;height:100%;background:${IMG(p.hue+i*20)}"></div></button>`).join('')}</div>
+        <div class="hero-main" id="heroMain">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}">`:p.noThumb?`<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-faint)">${ICONS.boxstack}</div>`:`<div style="width:100%;height:100%;background:${IMG(p.hue)}"></div>`}</div>
+        <div class="hero-thumbs">${[0,1,2,3].map(i=>`<button class="${i===0?'active':''}" data-thumb="${i}">${i===0&&p.image?`<img src="${esc(p.image)}" alt="">`:`<div style="width:100%;height:100%;background:${IMG(p.hue+i*20)}"></div>`}</button>`).join('')}</div>
       </div>
       <div class="hero-info">
         <div class="hero-title-row"><h2>${esc(p.name)}</h2><span class="badge in">Active</span></div>
@@ -1482,7 +1488,7 @@ function renderDetail(id){
   wrap.querySelector('#dDel').addEventListener('click', ()=>{ deleteCtx={type:'single', id:p.id}; $('#delTitle').textContent='Delete this product?'; openModal('modalDelete'); });
   wrap.querySelectorAll('[data-thumb]').forEach(t=>t.addEventListener('click', ()=>{
     wrap.querySelectorAll('.hero-thumbs button').forEach(b=>b.classList.remove('active')); t.classList.add('active');
-    $('#heroMain').innerHTML = `<div style="width:100%;height:100%;background:${IMG(p.hue+Number(t.dataset.thumb)*20)}"></div>`;
+    $('#heroMain').innerHTML = Number(t.dataset.thumb)===0&&p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}">` : `<div style="width:100%;height:100%;background:${IMG(p.hue+Number(t.dataset.thumb)*20)}"></div>`;
   }));
 }
 
