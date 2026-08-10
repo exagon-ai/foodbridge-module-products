@@ -1,0 +1,130 @@
+[
+  {
+    "id": "img-1",
+    "name": "Bill 11404",
+    "category": "Document",
+    "articleNo": "BILL-11404",
+    "img": "invoice,paper,handwritten",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-2",
+    "name": "Bill 11404 (UPI)",
+    "category": "Document",
+    "articleNo": "BILL-11404B",
+    "img": "ledger,paper,accounts",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-3",
+    "name": "Dark capture",
+    "category": "Uncategorised",
+    "articleNo": "IMG-0003",
+    "img": "black,texture",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-4",
+    "name": "Product QR",
+    "category": "Label",
+    "articleNo": "IMG-QR-04",
+    "img": "qr,code",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-5",
+    "name": "Shrikhand bowl",
+    "category": "Sweets",
+    "articleNo": "IMG-SHR-05",
+    "img": "shrikhand,dessert,saffron",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-6",
+    "name": "Rabri bowl",
+    "category": "Sweets",
+    "articleNo": "IMG-RAB-06",
+    "img": "kheer,rabri,dessert",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-7",
+    "name": "Kalakand plate",
+    "category": "Sweets",
+    "articleNo": "IMG-KAL-07",
+    "img": "kalakand,barfi,sweet",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-8",
+    "name": "Butter cookies",
+    "category": "Cookies",
+    "articleNo": "IMG-CKY-08",
+    "img": "butter,cookies",
+    "tags": [
+      "High margin"
+    ],
+    "linked": "Butter Cookies 200gm"
+  },
+  {
+    "id": "img-9",
+    "name": "R-Square bottle",
+    "category": "Water",
+    "articleNo": "IMG-RSB-09",
+    "img": "water,bottle,black",
+    "tags": [],
+    "linked": "250ml Pet"
+  },
+  {
+    "id": "img-10",
+    "name": "R-Square label sheet",
+    "category": "Label",
+    "articleNo": "IMG-RSL-10",
+    "img": "label,green,packaging",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-11",
+    "name": "R-Square label 2",
+    "category": "Label",
+    "articleNo": "IMG-RSL-11",
+    "img": "label,green,print",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-12",
+    "name": "Barfi tray",
+    "category": "Sweets",
+    "articleNo": "IMG-BRF-12",
+    "img": "barfi,silver,sweet",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-13",
+    "name": "Chocolate bar",
+    "category": "Snacks",
+    "articleNo": "IMG-CHO-13",
+    "img": "chocolate,bar",
+    "tags": [],
+    "linked": null
+  },
+  {
+    "id": "img-14",
+    "name": "Bread loaf",
+    "category": "Bread",
+    "articleNo": "IMG-BRD-14",
+    "img": "bread,loaf",
+    "tags": [],
+    "linked": "Milk Bread 200gm"
+  }
+]

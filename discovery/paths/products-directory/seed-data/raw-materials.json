@@ -1,0 +1,90 @@
+[
+  {
+    "id": "rm-1",
+    "name": "Maida",
+    "articleNo": "FBhIqZ",
+    "category": "Raw Material",
+    "img": "flour",
+    "purchasingPrice": 60,
+    "taxRate": 0,
+    "unit": "KG",
+    "stockTotal": 0
+  },
+  {
+    "id": "rm-2",
+    "name": "Sugar",
+    "articleNo": "RM-SUG-02",
+    "category": "Raw Material",
+    "img": "sugar",
+    "purchasingPrice": 45,
+    "taxRate": 0,
+    "unit": "KG",
+    "stockTotal": 320
+  },
+  {
+    "id": "rm-3",
+    "name": "Butter",
+    "articleNo": "RM-BTR-03",
+    "category": "Raw Material",
+    "img": "butter",
+    "purchasingPrice": 240,
+    "taxRate": 12,
+    "unit": "KG",
+    "stockTotal": 90
+  },
+  {
+    "id": "rm-4",
+    "name": "Yeast",
+    "articleNo": "RM-YST-04",
+    "category": "Raw Material",
+    "img": "yeast",
+    "purchasingPrice": 180,
+    "taxRate": 5,
+    "unit": "KG",
+    "stockTotal": 40
+  },
+  {
+    "id": "rm-5",
+    "name": "PET Preform 250ml",
+    "articleNo": "RM-PET-05",
+    "category": "Packaging",
+    "img": "plastic,bottle",
+    "purchasingPrice": 3.5,
+    "taxRate": 18,
+    "unit": "Pc",
+    "stockTotal": 12000
+  },
+  {
+    "id": "rm-6",
+    "name": "Bottle Cap",
+    "articleNo": "RM-CAP-06",
+    "category": "Packaging",
+    "img": "bottle,cap",
+    "purchasingPrice": 0.8,
+    "taxRate": 18,
+    "unit": "Pc",
+    "stockTotal": 45000
+  },
+  {
+    "id": "rm-7",
+    "name": "Cocoa Powder",
+    "articleNo": "RM-COC-07",
+    "category": "Raw Material",
+    "img": "cocoa",
+    "purchasingPrice": 260,
+    "taxRate": 5,
+    "unit": "KG",
+    "stockTotal": 60
+  },
+  {
+    "id": "rm-8",
+    "name": "Corrugated Box",
+    "articleNo": "RM-BOX-08",
+    "category": "Packaging",
+    "img": "cardboard,box",
+    "purchasingPrice": 22,
+    "taxRate": 18,
+    "unit": "Pc",
+    "stockTotal": 5200
+  }
+]

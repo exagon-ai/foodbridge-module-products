@@ -1,0 +1,544 @@
+[
+  {
+    "unit": "Bottle",
+    "baseUnit": "Box",
+    "conversionQty": 5,
+    "brand": "rsquare",
+    "packaging": [
+      {
+        "unit": "Bottle",
+        "tag": "Smallest Unit",
+        "conv": "1 Bottle",
+        "price": 10.5
+      },
+      {
+        "unit": "Box",
+        "tag": "Base Unit",
+        "conv": "1 Box = 5 Bottle",
+        "price": 52.5
+      }
+    ],
+    "id": "p-1",
+    "name": "250ml Pet",
+    "articleNo": "34567",
+    "category": "Square Bottle",
+    "categoryTop": "Water",
+    "img": "water,bottle",
+    "price": 10,
+    "taxRate": 5,
+    "stockTotal": 2800,
+    "canSell": 603,
+    "inOrders": 2197,
+    "barcode": "12345",
+    "active": true,
+    "highMargin": true,
+    "description": "Bottle Shape - Square, High quality plastic used Packed drinking water"
+  },
+  {
+    "unit": "Bottle",
+    "baseUnit": "Box",
+    "conversionQty": 5,
+    "brand": "Murli",
+    "packaging": [
+      {
+        "unit": "Bottle",
+        "tag": "Smallest Unit",
+        "conv": "1 Bottle",
+        "price": 15.75
+      },
+      {
+        "unit": "Box",
+        "tag": "Base Unit",
+        "conv": "1 Box = 5 Bottle",
+        "price": 78.75
+      }
+    ],
+    "id": "p-2",
+    "name": "500ml Pet",
+    "articleNo": "89744",
+    "category": "Square Bottle",
+    "categoryTop": "Water",
+    "img": "water,bottle",
+    "price": 15,
+    "taxRate": 5,
+    "stockTotal": 2782,
+    "canSell": 2575,
+    "inOrders": 207,
+    "barcode": "89744",
+    "active": true,
+    "highMargin": true,
+    "description": "500ml square PET packed drinking water bottle."
+  },
+  {
+    "unit": "Bottle",
+    "baseUnit": "Box",
+    "conversionQty": 5,
+    "brand": "Murli",
+    "packaging": [
+      {
+        "unit": "Bottle",
+        "tag": "Smallest Unit",
+        "conv": "1 Bottle",
+        "price": 21
+      },
+      {
+        "unit": "Box",
+        "tag": "Base Unit",
+        "conv": "1 Box = 5 Bottle",
+        "price": 105
+      }
+    ],
+    "id": "p-3",
+    "name": "1ltr Bottle",
+    "articleNo": "42534",
+    "category": "Square Bottle",
+    "categoryTop": "Water",
+    "img": "water,bottle",
+    "price": 20,
+    "taxRate": 5,
+    "stockTotal": 2775,
+    "canSell": 2704,
+    "inOrders": 71,
+    "barcode": "42534",
+    "active": true,
+    "highMargin": true,
+    "description": "1 litre square PET packed drinking water bottle."
+  },
+  {
+    "unit": "Bottle",
+    "baseUnit": "Box",
+    "conversionQty": 5,
+    "brand": "Murli",
+    "packaging": [
+      {
+        "unit": "Bottle",
+        "tag": "Smallest Unit",
+        "conv": "1 Bottle",
+        "price": 70.8
+      },
+      {
+        "unit": "Box",
+        "tag": "Base Unit",
+        "conv": "1 Box = 5 Bottle",
+        "price": 354
+      }
+    ],
+    "id": "p-4",
+    "name": "Natural Water",
+    "articleNo": "4534",
+    "category": "Round Bottle",
+    "categoryTop": "Water",
+    "img": "mineral,water",
+    "price": 60,
+    "taxRate": 18,
+    "stockTotal": 2627,
+    "canSell": 2592,
+    "inOrders": 35,
+    "barcode": "4534",
+    "active": true,
+    "description": "Premium natural mineral water, round bottle."
+  },
+  {
+    "unit": "Bottle",
+    "baseUnit": "Box",
+    "conversionQty": 5,
+    "brand": "Murli",
+    "packaging": [
+      {
+        "unit": "Bottle",
+        "tag": "Smallest Unit",
+        "conv": "1 Bottle",
+        "price": 21
+      },
+      {
+        "unit": "Box",
+        "tag": "Base Unit",
+        "conv": "1 Box = 5 Bottle",
+        "price": 105
+      }
+    ],
+    "id": "p-5",
+    "name": "Soda 650ml",
+    "articleNo": "435345",
+    "category": "Round Bottle",
+    "categoryTop": "Soda",
+    "img": "soda,bottle",
+    "price": 20,
+    "taxRate": 5,
+    "stockTotal": 2607,
+    "canSell": 2519,
+    "inOrders": 88,
+    "barcode": "435345",
+    "active": true,
+    "description": "650ml carbonated soda, round bottle."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 8
+      }
+    ],
+    "id": "p-6",
+    "name": "Mini Bread 100gm",
+    "articleNo": "a102",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "bread,loaf",
+    "price": 8,
+    "taxRate": 0,
+    "stockTotal": 0,
+    "canSell": 0,
+    "inOrders": 0,
+    "barcode": "a102",
+    "active": true,
+    "description": "Soft mini bread loaf, 100gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 15
+      }
+    ],
+    "id": "p-7",
+    "name": "Milk Bread 200gm",
+    "articleNo": "a103",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "milk,bread",
+    "price": 15,
+    "taxRate": 0,
+    "stockTotal": 62,
+    "canSell": 10,
+    "inOrders": 52,
+    "barcode": "a103",
+    "active": true,
+    "highMargin": true,
+    "description": "Milk bread loaf, 200gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 25
+      }
+    ],
+    "id": "p-8",
+    "name": "Milk Bread 350gm",
+    "articleNo": "a104",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "milk,bread",
+    "price": 25,
+    "taxRate": 0,
+    "stockTotal": 82,
+    "canSell": 61,
+    "inOrders": 21,
+    "barcode": "a104",
+    "active": true,
+    "highMargin": true,
+    "description": "Milk bread loaf, 350gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 24
+      }
+    ],
+    "id": "p-9",
+    "name": "Brown Bread 250gm",
+    "articleNo": "a105",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "brown,bread",
+    "price": 24,
+    "taxRate": 0,
+    "stockTotal": 91,
+    "canSell": 80,
+    "inOrders": 11,
+    "barcode": "a105",
+    "active": true,
+    "description": "Whole-wheat brown bread, 250gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 40
+      }
+    ],
+    "id": "p-10",
+    "name": "Brown Bread 350gm",
+    "articleNo": "a106",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "brown,bread",
+    "price": 40,
+    "taxRate": 0,
+    "stockTotal": 99,
+    "canSell": 93,
+    "inOrders": 6,
+    "barcode": "a106",
+    "active": true,
+    "highMargin": true,
+    "description": "Whole-wheat brown bread, 350gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 16
+      }
+    ],
+    "id": "p-11",
+    "name": "Kaju Bread 160gm",
+    "articleNo": "a107",
+    "category": "Bread",
+    "categoryTop": "Bread",
+    "img": "bread",
+    "price": 16,
+    "taxRate": 0,
+    "stockTotal": 95,
+    "canSell": 90,
+    "inOrders": 5,
+    "barcode": "a107",
+    "active": true,
+    "highMargin": true,
+    "description": "Cashew (kaju) bread, 160gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 231
+      }
+    ],
+    "id": "p-12",
+    "name": "Vanilla Sponge Cake",
+    "articleNo": "c201",
+    "category": "Cake",
+    "categoryTop": "Cake",
+    "img": "vanilla,cake",
+    "price": 220,
+    "taxRate": 5,
+    "stockTotal": 40,
+    "canSell": 34,
+    "inOrders": 6,
+    "barcode": "c201",
+    "active": true,
+    "description": "Vanilla sponge cake, 500gm."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 399
+      }
+    ],
+    "id": "p-13",
+    "name": "Choco Truffle Cake",
+    "articleNo": "c202",
+    "category": "Cake",
+    "categoryTop": "Cake",
+    "img": "chocolate,cake",
+    "price": 380,
+    "taxRate": 5,
+    "stockTotal": 24,
+    "canSell": 18,
+    "inOrders": 6,
+    "barcode": "c202",
+    "active": true,
+    "highMargin": true,
+    "description": "Rich chocolate truffle cake, 1kg."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 67.2
+      }
+    ],
+    "id": "p-14",
+    "name": "Butter Cookies 200gm",
+    "articleNo": "k301",
+    "category": "Cookies",
+    "categoryTop": "Cookies",
+    "img": "butter,cookies",
+    "price": 60,
+    "taxRate": 12,
+    "stockTotal": 140,
+    "canSell": 132,
+    "inOrders": 8,
+    "barcode": "k301",
+    "active": true,
+    "description": "Crisp butter cookies, 200gm pack."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 84
+      }
+    ],
+    "id": "p-15",
+    "name": "Choco Chip Cookies",
+    "articleNo": "k302",
+    "category": "Cookies",
+    "categoryTop": "Cookies",
+    "img": "chocolate,cookies",
+    "price": 75,
+    "taxRate": 12,
+    "stockTotal": 118,
+    "canSell": 110,
+    "inOrders": 8,
+    "barcode": "k302",
+    "active": true,
+    "description": "Chocolate chip cookies, 200gm pack."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 21
+      }
+    ],
+    "id": "p-16",
+    "name": "Classic Cream Roll",
+    "articleNo": "r401",
+    "category": "Cream Roll",
+    "categoryTop": "Cream Roll",
+    "img": "cream,roll",
+    "price": 20,
+    "taxRate": 5,
+    "stockTotal": 90,
+    "canSell": 84,
+    "inOrders": 6,
+    "barcode": "r401",
+    "active": true,
+    "description": "Flaky cream roll, single piece."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 36.75
+      }
+    ],
+    "id": "p-17",
+    "name": "Choco Donut",
+    "articleNo": "d501",
+    "category": "Donut",
+    "categoryTop": "Donut",
+    "img": "donut",
+    "price": 35,
+    "taxRate": 5,
+    "stockTotal": 60,
+    "canSell": 52,
+    "inOrders": 8,
+    "barcode": "d501",
+    "active": true,
+    "description": "Chocolate-glazed donut."
+  },
+  {
+    "unit": "Pc",
+    "baseUnit": "Pc",
+    "conversionQty": 1,
+    "brand": "Murli Bakers",
+    "packaging": [
+      {
+        "unit": "Pc",
+        "tag": "Smallest Unit",
+        "conv": "1 Pc",
+        "price": 47.25
+      }
+    ],
+    "id": "p-18",
+    "name": "Veg Sandwich",
+    "articleNo": "s601",
+    "category": "Sandwitch",
+    "categoryTop": "Sandwitch",
+    "img": "sandwich",
+    "price": 45,
+    "taxRate": 5,
+    "stockTotal": 30,
+    "canSell": 26,
+    "inOrders": 4,
+    "barcode": "s601",
+    "active": true,
+    "description": "Grilled vegetable sandwich."
+  }
+]
