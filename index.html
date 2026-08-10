@@ -1,18 +1,20 @@
 <!doctype html>
 <!--
-  ROOT REDIRECT — GitHub Pages serves this repo from `main`'s root, but the actual
-  discovery prototype lives at /discovery/index.html (see README.md for the module
-  layout). This file only exists so the bare Pages URL doesn't 404; it has no other
-  role and is not part of the discovery prototype itself.
+  ROOT REDIRECT — GitHub Pages serves this repo from `main`'s root. This lands the
+  bare Pages URL directly on the Products Directory HTML prototype (v2) so the
+  deployed site opens on the working app. The module discovery hub is still at
+  /discovery/index.html; the prototype it points to lives under
+  /discovery/paths/products-directory/.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0; url=discovery/index.html" />
-  <title>Foodbridge Modules Products</title>
+  <meta http-equiv="refresh" content="0; url=discovery/paths/products-directory/screens/products/all-products.html" />
+  <title>Foodbridge Module — Products Directory</title>
 </head>
 <body>
-  <p>Redirecting to the <a href="discovery/index.html">discovery prototype</a>…</p>
-  <script>location.replace('discovery/index.html');</script>
+  <p>Opening the <a href="discovery/paths/products-directory/screens/products/all-products.html">Products Directory prototype</a>…
+     &nbsp;(<a href="discovery/index.html">module discovery hub</a>)</p>
+  <script>location.replace('discovery/paths/products-directory/screens/products/all-products.html');</script>
 </body>
 </html>
