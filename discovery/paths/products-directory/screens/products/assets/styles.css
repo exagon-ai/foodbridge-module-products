@@ -661,3 +661,30 @@ table.grid tbody tr:hover { background: #fafbfc; }
   .mf-btn.primary .mf-ic,
   .mf-btn.active .mf-ic { position: static; top: 0; margin: 0; width: 42px; height: 26px; background: var(--emerald-600); color: #fff; border-radius: 9px; box-shadow: none; }
 }
+
+/* ==========================================================================
+   v2.7 — "Add Pricing and Unit Details" modal: bigger & uncramped on both
+   desktop and mobile.
+   ========================================================================== */
+.modal-panel.upm-modal { max-width: 680px; }
+.upm-modal .mp-body { padding: 22px 28px; }
+.upm-units { gap: 24px; margin-bottom: 20px; }
+.upm-tax { padding: 18px 20px; }
+.upm-tax-grid { gap: 20px; }
+.upm-price { margin-bottom: 16px; }
+
+@media (max-width: 768px) {
+  /* Give modals more of the screen so content isn't congested */
+  .modal-scrim { padding: 10px; }
+  .modal-panel.upm-modal { max-width: 100%; width: 100%; max-height: 94vh; }
+  .upm-modal .mp-body { padding: 16px 16px 24px; }
+  .upm-units { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .upm-lbl { font-size: 13.5px; }
+  .upm-hint { font-size: 11.5px; }
+  /* GST rate stacks above GST treatment; treatment cards go full-width (no squish) */
+  .upm-tax-grid { grid-template-columns: 1fr; gap: 16px; }
+  .gst-treat { grid-template-columns: 1fr; gap: 10px; }
+  .gst-card { padding: 12px 14px; }
+  .gst-card small { line-height: 1.4; }
+  .upm-price input { height: 48px; }
+}

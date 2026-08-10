@@ -133,9 +133,9 @@
   }
 
   // ── General modal ─────────────────────────────────────────────────────────
-  function modal({ title, headExtra, body, footer, wide }) {
+  function modal({ title, headExtra, body, footer, wide, panelClass }) {
     const scrim = document.createElement("div"); scrim.className = "modal-scrim";
-    scrim.innerHTML = `<div class="modal-panel ${wide ? "wide" : ""}" role="dialog" aria-modal="true">
+    scrim.innerHTML = `<div class="modal-panel ${wide ? "wide" : ""} ${panelClass || ""}" role="dialog" aria-modal="true">
       <div class="mp-head"><h3>${esc(title)}</h3>${headExtra || ""}<button class="x" data-close>${I.x}</button></div>
       <div class="mp-body">${body}</div>${footer ? `<div class="mp-foot">${footer}</div>` : ""}</div>`;
     document.body.appendChild(scrim);
@@ -257,7 +257,7 @@
     const priceLabel = opts.isRawMaterial ? "Purchasing Price Per" : "Selling Price Per";
     const cur = { smallest: panel.querySelector("[name=unit]")?.value || "", base: panel.querySelector("[name=baseUnit]")?.value || "", conv: panel.querySelector("[name=conversionQty]")?.value || 1, price: panel.querySelector("[name=price]")?.value || "", gst: panel.querySelector("[name=gst]")?.value || 0, taxType: panel.querySelector("[name=taxType]")?.value || "Included in Price" };
     const dl = `<datalist id="unitDL">${UNITS.map((u) => `<option>${u}</option>`).join("")}</datalist>`;
-    const m = modal({ title: "Add Pricing and Unit Details",
+    const m = modal({ title: "Add Pricing and Unit Details", panelClass: "upm-modal",
       body: `<p style="margin:-8px 0 18px;color:var(--muted);font-size:13.5px">Configure selling units, conversion quantities, GST treatment, and prices.</p>${dl}
         <div class="upm-units">
           <div class="upm-field"><div class="upm-lbl">Smallest Unit <span class="req">*</span></div><div class="upm-hint">e.g. Bottle, Piece, KG</div><input id="upSmall" list="unitDL" placeholder="Select or add unit" value="${attr(cur.smallest)}"></div>
