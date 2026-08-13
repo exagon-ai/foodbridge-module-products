@@ -668,6 +668,11 @@ table.grid tbody tr:hover { background: #fafbfc; }
   .drawer, .drawer.wide { width: 100vw; max-width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; }
   .drawer-head { border-radius: 0; }
 
+  /* Embedded in the mock platform: it overlays a 56px top header across the
+     iframe, which would hide the drawer's own header. Drop the drawer below it so
+     the title stays visible. Standalone (not embedded) is left flush at the top. */
+  .fb-embedded .drawer, .fb-embedded .drawer.wide { box-sizing: border-box; padding-top: 68px; }
+
   /* Footer: equal columns, single-line labels aligned at the baseline, floating primary */
   .mobile-footer { align-items: flex-end; gap: 0; padding: 14px 2px calc(8px + env(safe-area-inset-bottom, 0px)); }
   .mf-btn { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 5px; white-space: nowrap; font-size: 10.5px; }

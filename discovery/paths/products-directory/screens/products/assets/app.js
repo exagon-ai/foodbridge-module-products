@@ -11,6 +11,11 @@
    Everything mutates the in-memory seed data and re-renders.
    ========================================================================== */
 (function () {
+  // When this module is embedded in the mock platform, the platform overlays its
+  // own 56px header across the top of the iframe on mobile — which would otherwise
+  // hide an open drawer's own header. Flag the document so the drawer drops below
+  // it (see .fb-embedded rule in styles.css). Standalone (top-level) is untouched.
+  try { if (window.self !== window.top) document.documentElement.classList.add("fb-embedded"); } catch (e) { document.documentElement.classList.add("fb-embedded"); }
   const SEED = window.SEED || { products: [], categories: [], rawMaterials: [] };
   const PAGE_SIZE = 10;
   const UNITS = ["Bottle", "Box", "Pc", "KG", "gm", "L", "ml", "Dozen", "Pack", "Roll"];
