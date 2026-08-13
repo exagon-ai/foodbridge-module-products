@@ -48,6 +48,10 @@
     scan: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 8v8M11 8v8M16 8v8"/></svg>',
     imgph: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>',
     imgphL: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>',
+    cam: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3"/></svg>',
+    flip: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>',
+    crop: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>',
+    refresh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>',
     pkg: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V16a2 2 0 0 1-1 1.7l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.7l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8Z"/><path d="m3.3 7 8.7 5 8.7-5"/></svg>',
     check: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.01l-3-3"/></svg>',
     lock: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
@@ -820,17 +824,168 @@
       panel.querySelector("#tagNew").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(); } });
     }
     // ── Take photos (camera) ───────────────────────────────────────────────
+    // Full flow, matching the live app: a live camera with Image Format /
+    // Resolution, then a review step (tags · Retake/Take Another/Crop/Save),
+    // an aspect-locked crop with zoom, and a "My Photos" gallery.
     function openTakePhotos() {
-      const m = modal({ title: "Take photos", wide: true, body: `<div class="cam-wrap"><div class="cam-view" id="camView"><video id="camVideo" autoplay playsinline muted></video></div><div class="cam-controls"><button class="btn" id="camFlip">${I.chev} Flip</button><button class="btn btn-primary" id="camCap">${I.imgph} Capture</button></div><div id="camNote" style="text-align:center;color:var(--muted);margin-top:12px"></div></div>` });
-      let stream = null, facing = "environment";
-      const video = m.panel.querySelector("#camVideo"), note = m.panel.querySelector("#camNote");
-      const stop = () => { if (stream) stream.getTracks().forEach((t) => t.stop()); stream = null; };
-      const start = async () => { try { stop(); stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing } }); video.srcObject = stream; } catch (e) { note.textContent = "Camera unavailable — use Upload images instead."; m.panel.querySelector("#camCap").disabled = true; m.panel.querySelector("#camFlip").disabled = true; } };
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) start(); else { note.textContent = "Camera not supported in this browser."; m.panel.querySelector("#camCap").disabled = true; }
-      m.panel.querySelector("#camFlip").addEventListener("click", () => { facing = facing === "environment" ? "user" : "environment"; start(); });
-      m.panel.querySelector("#camCap").addEventListener("click", () => { const c = document.createElement("canvas"); c.width = video.videoWidth || 512; c.height = video.videoHeight || 512; c.getContext("2d").drawImage(video, 0, 0, c.width, c.height); const url = c.toDataURL("image/jpeg", 0.85); SEED.images.unshift({ id: "img-" + Date.now(), name: "Photo " + new Date().toLocaleTimeString(), category: "Uncategorised", articleNo: "IMG-" + Math.floor(Math.random() * 9000 + 1000), url, tags: [], linked: null }); toast("Photo captured", "ok"); });
-      m.panel.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", () => { stop(); render(); }));
-      m.scrim.addEventListener("click", (e) => { if (e.target === m.scrim) { stop(); render(); } });
+      const FORMATS = { square: { label: "Square (1:1)", w: 1, h: 1 }, portrait: { label: "Portrait (4:5)", w: 4, h: 5 }, landscape: { label: "Landscape (4:3)", w: 4, h: 3 } };
+      const RES = [ { v: 720, label: "Standard (720 px)" }, { v: 1028, label: "Standard+ (1028 px)" }, { v: 2048, label: "High (2048 px)" } ];
+      const S = { view: "capture", format: "square", res: 1028, locked: false, count: 0, max: 4, captured: null, tags: new Set(), facing: "environment", stream: null, session: [] };
+      const dims = () => { const f = FORMATS[S.format]; return f.w >= f.h ? { w: S.res, h: Math.round((S.res * f.h) / f.w) } : { w: Math.round((S.res * f.w) / f.h), h: S.res }; };
+
+      const m = modal({ title: "Take photos", wide: true, panelClass: "cam-modal", headExtra: `<div class="cam-head-right" id="camHeadRight"></div>`, body: `<div class="cam-body" id="camBody"></div>` });
+      const body = m.panel.querySelector("#camBody"), headRight = m.panel.querySelector("#camHeadRight");
+      const stopStream = () => { if (S.stream) { S.stream.getTracks().forEach((t) => t.stop()); S.stream = null; } };
+
+      async function startCamera(video, note) {
+        try { stopStream(); S.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: S.facing } }); video.srcObject = S.stream; }
+        catch (e) { note.textContent = "Camera unavailable — check permissions, or use Upload images instead."; const c = body.querySelector("#camCap"), f = body.querySelector("#camFlip"); if (c) c.disabled = true; if (f) f.disabled = true; }
+      }
+      function fmtRow(locked) {
+        const d = dims();
+        return `<div class="cam-fmt ${locked ? "locked" : ""}">
+          <div class="cf"><label>Image Format</label><select id="fmtSel" ${locked ? "disabled" : ""}>${Object.entries(FORMATS).map(([k, f]) => `<option value="${k}" ${S.format === k ? "selected" : ""}>${f.label}</option>`).join("")}</select></div>
+          <div class="cf"><label>Resolution</label><select id="resSel" ${locked ? "disabled" : ""}>${RES.map((r) => `<option value="${r.v}" ${S.res === r.v ? "selected" : ""}>${r.label}</option>`).join("")}</select></div>
+          <div class="cf-dim">${d.w} × ${d.h} px</div>
+          <div class="cf-note">${locked ? "Format and resolution locked until save" : "Locks after the first capture"}</div>
+        </div>`;
+      }
+      function wireFmt() {
+        const fs = body.querySelector("#fmtSel"), rs = body.querySelector("#resSel");
+        const refresh = () => { const el = body.querySelector(".cf-dim"); if (el) { const d = dims(); el.textContent = `${d.w} × ${d.h} px`; } };
+        if (fs && !fs.disabled) fs.addEventListener("change", () => { S.format = fs.value; refresh(); });
+        if (rs && !rs.disabled) rs.addEventListener("change", () => { S.res = +rs.value; refresh(); });
+      }
+      function renderHead() {
+        const dots = Array.from({ length: S.max }, (_, i) => `<span class="cam-dot ${i < S.count ? "on" : ""}"></span>`).join("");
+        headRight.innerHTML = `<span class="cam-dots">${dots}</span><span class="cam-count">${S.count}/${S.max} photos</span><button class="btn" id="camGallery">${I.imgph} Gallery</button>`;
+        headRight.querySelector("#camGallery").addEventListener("click", () => go("gallery"));
+      }
+      function go(v) { S.view = v; renderHead(); ({ capture: viewCapture, review: viewReview, crop: viewCrop, gallery: viewGallery })[v](); }
+
+      function saveCurrent(close) {
+        if (!S.captured) return;
+        const id = "img-" + Date.now();
+        SEED.images.unshift({ id, name: "Photo " + new Date().toLocaleTimeString(), category: "Uncategorised", articleNo: "IMG-" + Math.floor(Math.random() * 9000 + 1000), url: S.captured, tags: [...S.tags], linked: null });
+        S.session.unshift(id); S.count = Math.min(S.max, S.count + 1); S.captured = null; S.tags = new Set();
+        toast("Photo saved", "ok");
+        if (close || S.count >= S.max) { stopStream(); m.close(); render(); } else go("capture");
+      }
+
+      // ---- Capture ----
+      function viewCapture() {
+        stopStream();
+        const d = dims();
+        body.innerHTML = fmtRow(S.locked) +
+          `<div class="cam-view" style="aspect-ratio:${d.w}/${d.h}"><video id="camVideo" autoplay playsinline muted></video></div>
+           <div class="cam-controls"><button class="btn" id="camFlip">${I.flip} Flip</button><button class="btn btn-primary" id="camCap">${I.cam} Capture</button></div>
+           <div class="cam-msg" id="camNote"></div>`;
+        wireFmt();
+        const video = body.querySelector("#camVideo"), note = body.querySelector("#camNote");
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) startCamera(video, note);
+        else { note.textContent = "Camera not supported in this browser."; body.querySelector("#camCap").disabled = true; body.querySelector("#camFlip").disabled = true; }
+        body.querySelector("#camFlip").addEventListener("click", () => { S.facing = S.facing === "environment" ? "user" : "environment"; startCamera(video, note); });
+        body.querySelector("#camCap").addEventListener("click", () => {
+          const d2 = dims(), vw = video.videoWidth || 512, vh = video.videoHeight || 512, tAR = d2.w / d2.h, sAR = vw / vh;
+          let sw, sh, sx, sy; if (sAR > tAR) { sh = vh; sw = vh * tAR; sx = (vw - sw) / 2; sy = 0; } else { sw = vw; sh = vw / tAR; sx = 0; sy = (vh - sh) / 2; }
+          const c = document.createElement("canvas"); c.width = d2.w; c.height = d2.h; c.getContext("2d").drawImage(video, sx, sy, sw, sh, 0, 0, d2.w, d2.h);
+          S.captured = c.toDataURL("image/jpeg", 0.9); S.locked = true; S.tags = new Set(); go("review");
+        });
+      }
+
+      // ---- Review ----
+      function viewReview() {
+        stopStream();
+        const d = dims();
+        body.innerHTML = fmtRow(true) +
+          `<div class="cam-view" style="aspect-ratio:${d.w}/${d.h}"><img id="camShot" src="${attr(S.captured)}" alt="Captured photo"></div>
+           <div class="up-tags-box cam-tags"><div class="hd">${I.tag} Image Tags</div><div class="cam-tags-sub">Add one or more tags for these photos</div>
+             <div class="row"><input id="tagNew" placeholder="Add tag"><button type="button" class="btn btn-primary" id="tagAdd">Add</button></div>
+             <div class="tag-current" id="tagCur" style="margin-top:10px"></div></div>
+           <div class="cam-controls cam-review-actions">
+             <button class="btn" id="reRetake">${I.refresh} Retake</button>
+             <button class="btn" id="reAnother">${I.cam} Take Another</button>
+             <button class="btn" id="reCrop">${I.crop} Crop</button>
+             <button class="btn btn-primary" id="reSave">${I.check} Save &amp; Next Product ${I.chevR}</button>
+           </div>`;
+        const cur = body.querySelector("#tagCur");
+        const renderCur = () => { cur.innerHTML = [...S.tags].map((t) => `<span class="chip" data-t="${attr(t)}">${esc(t)} <button type="button">${I.x}</button></span>`).join(""); cur.querySelectorAll(".chip button").forEach((b) => b.addEventListener("click", () => { S.tags.delete(b.parentNode.dataset.t); renderCur(); })); };
+        const addTag = () => { const inp = body.querySelector("#tagNew"), v = inp.value.trim().replace(/,$/, ""); if (!v || S.tags.has(v) || S.tags.size >= 10) return; S.tags.add(v); inp.value = ""; renderCur(); };
+        body.querySelector("#tagAdd").addEventListener("click", addTag);
+        body.querySelector("#tagNew").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(); } });
+        renderCur();
+        body.querySelector("#reRetake").addEventListener("click", () => { S.captured = null; go("capture"); });
+        body.querySelector("#reAnother").addEventListener("click", () => saveCurrent(false));
+        body.querySelector("#reCrop").addEventListener("click", () => go("crop"));
+        body.querySelector("#reSave").addEventListener("click", () => saveCurrent(true));
+      }
+
+      // ---- Crop (aspect-locked selection + zoom) ----
+      function viewCrop() {
+        stopStream();
+        const d = dims(), AR = d.w / d.h;
+        body.innerHTML = fmtRow(true) +
+          `<div class="crop-head"><h4>Crop your photo</h4><p>Drag the selection to move it. Pull a green corner to resize.</p></div>
+           <div class="crop-stage" id="cropStage" style="aspect-ratio:${d.w}/${d.h}"><img id="cropImg" src="${attr(S.captured)}" draggable="false"><div class="crop-sel" id="cropSel"><span class="ch tl"></span><span class="ch tr"></span><span class="ch bl"></span><span class="ch br"></span></div></div>
+           <div class="crop-zoom"><span class="zic">${I.search}</span><input type="range" id="cropZoom" min="100" max="300" value="100"><span id="cropZoomVal">100%</span></div>
+           <div class="cam-controls"><button class="btn" id="crCancel">Cancel</button><button class="btn" id="crReset">${I.refresh} Reset</button><button class="btn btn-primary" id="crApply">${I.crop} Apply Crop</button></div>`;
+        const stage = body.querySelector("#cropStage"), img = body.querySelector("#cropImg"), sel = body.querySelector("#cropSel");
+        let zoom = 1, box = null, drag = null;
+        const sr = () => stage.getBoundingClientRect();
+        function clampBox() { const r = sr(); box.w = Math.max(40, Math.min(box.w, r.width)); box.h = box.w / AR; if (box.h > r.height) { box.h = r.height; box.w = box.h * AR; } box.x = Math.max(0, Math.min(box.x, r.width - box.w)); box.y = Math.max(0, Math.min(box.y, r.height - box.h)); }
+        function applyBox() { clampBox(); sel.style.left = box.x + "px"; sel.style.top = box.y + "px"; sel.style.width = box.w + "px"; sel.style.height = box.h + "px"; }
+        function resetBox() { const r = sr(); box = { x: 0, y: 0, w: r.width, h: r.height }; applyBox(); }
+        const onMove = (e) => {
+          if (!drag) return; const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy, b = drag.box;
+          if (drag.mode === "move") { box.x = b.x + dx; box.y = b.y + dy; }
+          else {
+            const fixedX = drag.mode === "tl" || drag.mode === "bl" ? b.x + b.w : b.x;
+            const fixedY = drag.mode === "tl" || drag.mode === "tr" ? b.y + b.h : b.y;
+            const r = sr(), px = Math.max(0, Math.min(e.clientX - r.left, r.width));
+            let nw = Math.max(40, Math.abs(px - fixedX)), nh = nw / AR;
+            box.w = nw; box.h = nh;
+            box.x = drag.mode === "tl" || drag.mode === "bl" ? fixedX - nw : fixedX;
+            box.y = drag.mode === "tl" || drag.mode === "tr" ? fixedY - nh : fixedY;
+          }
+          applyBox();
+        };
+        const onUp = () => { drag = null; window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); };
+        const onDown = (e, mode) => { e.preventDefault(); drag = { mode, sx: e.clientX, sy: e.clientY, box: { ...box } }; window.addEventListener("pointermove", onMove); window.addEventListener("pointerup", onUp); };
+        sel.addEventListener("pointerdown", (e) => { if (!e.target.classList.contains("ch")) onDown(e, "move"); });
+        sel.querySelectorAll(".ch").forEach((h) => { const mode = ["tl", "tr", "bl", "br"].find((c) => h.classList.contains(c)); h.addEventListener("pointerdown", (e) => { e.stopPropagation(); onDown(e, mode); }); });
+        const zr = body.querySelector("#cropZoom");
+        zr.addEventListener("input", () => { zoom = +zr.value / 100; img.style.transform = `scale(${zoom})`; body.querySelector("#cropZoomVal").textContent = zr.value + "%"; });
+        body.querySelector("#crCancel").addEventListener("click", () => go("review"));
+        body.querySelector("#crReset").addEventListener("click", () => { zoom = 1; zr.value = 100; img.style.transform = "scale(1)"; body.querySelector("#cropZoomVal").textContent = "100%"; resetBox(); });
+        body.querySelector("#crApply").addEventListener("click", () => {
+          const r = sr(), natW = img.naturalWidth || d.w, natH = img.naturalHeight || d.h, base = natW / r.width, cx = r.width / 2, cy = r.height / 2;
+          const toNat = (X, Y) => ({ x: ((X - cx) / zoom + cx) * base, y: ((Y - cy) / zoom + cy) * base });
+          const p1 = toNat(box.x, box.y), p2 = toNat(box.x + box.w, box.y + box.h);
+          let sx = Math.max(0, Math.min(p1.x, p2.x)), sy = Math.max(0, Math.min(p1.y, p2.y));
+          let sw = Math.min(natW - sx, Math.abs(p2.x - p1.x)), sh = Math.min(natH - sy, Math.abs(p2.y - p1.y));
+          const out = document.createElement("canvas"); out.width = d.w; out.height = d.h; out.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, d.w, d.h);
+          S.captured = out.toDataURL("image/jpeg", 0.92); toast("Crop applied", "ok"); go("review");
+        });
+        requestAnimationFrame(resetBox);
+      }
+
+      // ---- My Photos gallery ----
+      function viewGallery() {
+        stopStream();
+        const imgs = SEED.images;
+        body.innerHTML = `<div class="cam-gallery">
+          <div class="cg-head"><button class="back-link" id="cgBack">${I.back} Back</button><h3>${I.imgph} My Photos</h3></div>
+          <div class="cg-pill">All ${imgs.length}</div>
+          <div class="cg-grid">${imgs.map((i) => `<div class="cg-tile ${S.session.includes(i.id) ? "new" : ""}"><img src="${imgSrc(i, 300)}" alt="${attr(i.name)}" onerror="this.style.display='none'"></div>`).join("")}</div>
+        </div>`;
+        body.querySelector("#cgBack").addEventListener("click", () => go(S.captured ? "review" : "capture"));
+      }
+
+      // Close (X / scrim) must also stop the camera and refresh the grid behind.
+      m.panel.querySelector(".x[data-close]").addEventListener("click", () => { stopStream(); render(); });
+      m.scrim.addEventListener("click", (e) => { if (e.target === m.scrim) { stopStream(); render(); } });
+
+      go("capture");
     }
     // ── Create / assign an image tag drawer ────────────────────────────────
     function openAddTag(ids) {
