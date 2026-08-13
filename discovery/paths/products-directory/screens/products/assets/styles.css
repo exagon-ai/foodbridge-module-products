@@ -166,7 +166,7 @@ table.grid tbody tr:hover { background: #fafbfc; }
 .drawer-head p { margin: 5px 0 0; font-size: 13px; color: var(--muted); }
 .drawer-head .x { position: absolute; top: 20px; right: 24px; width: 34px; height: 34px; border-radius: 50%; background: #fee2e2; color: var(--rose-500); border: none; display: grid; place-items: center; }
 .drawer-head .x:hover { background: #fecaca; }
-.drawer-body { flex: 1; overflow-y: auto; padding: 8px 30px 24px; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 28px 30px 24px; }
 .d-row { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: start; padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
 .d-row > label { font-size: 14px; font-weight: 600; color: #374151; padding-top: 10px; }
 .d-row > label .req { color: var(--rose-500); }
@@ -270,7 +270,7 @@ table.grid tbody tr:hover { background: #fafbfc; }
   .mf-btn .mf-ic { width: 22px; height: 22px; display: grid; place-items: center; }
   .mf-btn.primary { color: var(--emerald-700); } .mf-btn.primary .mf-ic { background: var(--emerald-600); color: #fff; border-radius: 9px; width: 34px; height: 26px; }
   .mf-divider { width: 1px; height: 30px; background: var(--line); }
-  .drawer { width: 100%; } .drawer-body { padding: 8px 16px 24px; } .drawer-head, .drawer-foot { padding-left: 16px; padding-right: 16px; }
+  .drawer { width: 100%; } .drawer-body { padding: 24px 16px 24px; } .drawer-head, .drawer-foot { padding-left: 16px; padding-right: 16px; }
 }
 
 /* ==========================================================================

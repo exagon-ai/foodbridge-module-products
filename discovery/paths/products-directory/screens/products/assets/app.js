@@ -191,7 +191,6 @@
       if (onSave(f) !== false) close();
     });
     panel.querySelectorAll("[data-generate]").forEach((b) => b.addEventListener("click", () => { panel.querySelector(`[name='${b.dataset.generate}']`).value = Array.from({ length: 6 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random() * 32)]).join(""); }));
-    panel.querySelectorAll("[data-scan]").forEach((b) => b.addEventListener("click", () => { panel.querySelector(`[name='${b.dataset.scan}']`).value = String(Math.floor(Math.random() * 9e11 + 1e11)); toast("Barcode captured", "ok"); }));
     panel.querySelectorAll(".img-box").forEach((box) => {
       const input = document.createElement("input"); input.type = "file"; input.accept = "image/*"; input.style.display = "none"; box.appendChild(input);
       box.addEventListener("click", (e) => { if (e.target.closest(".rm")) return; input.click(); });
@@ -448,7 +447,7 @@
     const subcats = () => [...new Set(SEED.products.map((p) => p.category))];
     const content = document.getElementById("content");
     content.innerHTML = `
-      <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><button class="btn" id="bulk">${I.bulk} Bulk Action <span class="caret">${I.chev}</span></button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Product</button><button class="btn" id="gsheet">${I.sheet} Google Sheet</button></div>
+      <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><button class="btn" id="bulk">${I.bulk} Bulk Action <span class="caret">${I.chev}</span></button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Product</button></div>
       <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search Product"></div><select class="filter desktop-filter" id="cat"></select></div>
       <div class="chips" id="chips"></div><div id="list"></div>`;
 
@@ -468,7 +467,7 @@
         dRow("Description", false, `<textarea name="description" placeholder="Description">${esc(p.description || "")}</textarea>`),
         dRow("Images", false, imgGrid),
         dRow("HSN/SAC", false, `<input name="hsn" value="${attr(p.hsn || "")}" placeholder="HSN/SAC">`),
-        dRow("Barcode", false, `<div class="with-btn"><input name="barcode" value="${attr(p.barcode || "")}" placeholder="Barcode"><button type="button" class="btn btn-primary" data-scan="barcode" style="height:44px;width:48px;padding:0;justify-content:center">${I.scan}</button></div>`),
+        dRow("Barcode", false, `<input name="barcode" value="${attr(p.barcode || "")}" placeholder="Barcode">`),
         dRow("Category", true, catCombo(p.category)),
         dRow('Unit &amp; Price', true, `<button type="button" class="unit-price-btn${p.unit ? " set" : ""}">${p.unit ? `${esc(p.unit)} · ₹${p.price} (1 ${esc(p.baseUnit || p.unit)} = ${p.conversionQty || 1} ${esc(p.unit)})` : "Select Unit &amp; Price"}</button>`),
         dRow('Price <i class="info-i">i</i>', false, `<input name="price" type="number" readonly value="${attr(p.price != null ? p.price : "")}" placeholder="0" style="background:#f3f4f6;color:var(--muted)">`),
@@ -600,7 +599,6 @@
         { icon: I.upload, label: "Import/Export", onClick: () => importExportSheet("Products", importFn) },
         { icon: I.plus, label: "Product", cls: "primary", onClick: openAdd },
         { icon: I.bulk, label: "Bulk Action", onClick: (el) => bulkMenu(el) },
-        { icon: I.sheet, label: "Sheet", cls: "accent", onClick: () => doExport("Products", "csv") },
       ]);
     }
     let deb;
@@ -610,7 +608,6 @@
     document.getElementById("export").addEventListener("click", (e) => exportMenu(e.currentTarget, "Products"));
     document.getElementById("import").addEventListener("click", () => importModal("Products", (n) => { state.page = 1; fillCat(); fillChips(); render(); toast(`${n} products imported`, "ok"); }));
     document.getElementById("bulk").addEventListener("click", (e) => bulkMenu(e.currentTarget));
-    document.getElementById("gsheet").addEventListener("click", () => { download("products-google-sheet.csv", toCSV(EXPORT.Products.headers, EXPORT.Products.rows()), "text/csv"); toast("Exported a Google-Sheets-ready CSV", "ok"); });
     fillCat(); fillChips(); render();
   }
 
@@ -637,7 +634,7 @@
     const state = { search: "", showChild: false, page: 1, expanded: new Set() };
     const content = document.getElementById("content");
     content.innerHTML = `
-      <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><div class="grow"></div><button class="btn" id="gsheet">${I.sheet} Google Sheet</button><button class="btn btn-primary" id="add">${I.plus} Add Category</button></div>
+      <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Category</button></div>
       <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search by Category name"></div><label class="toggle-wrap"><span class="switch ${state.showChild ? "on" : ""}" id="sw"></span> Show subcategories</label></div>
       <div id="list"></div>`;
     function filtered() { const q = state.search.trim().toLowerCase(); if (!q) return SEED.categories.map((c) => ({ ...c })); const out = []; SEED.categories.forEach((c) => { const pm = c.name.toLowerCase().includes(q) || (c.description || "").toLowerCase().includes(q); const kids = (c.children || []).filter((k) => k.name.toLowerCase().includes(q) || (k.description || "").toLowerCase().includes(q)); if (pm) { out.push({ ...c }); if (kids.length) state.expanded.add(c.id); } else if (kids.length) { out.push({ ...c, children: kids }); state.expanded.add(c.id); } }); return out; }
@@ -683,7 +680,6 @@
       footer([
         { icon: I.upload, label: "Import/Export", onClick: () => importExportSheet("Categories", importFn) },
         { icon: I.plus, label: "Add", cls: "primary", onClick: openAdd },
-        { icon: I.sheet, label: "Sheet", cls: "accent", onClick: () => doExport("Categories", "csv") },
       ]);
     }
     let deb;
@@ -692,7 +688,6 @@
     document.getElementById("add").addEventListener("click", openAdd);
     document.getElementById("export").addEventListener("click", (e) => exportMenu(e.currentTarget, "Categories"));
     document.getElementById("import").addEventListener("click", () => importModal("Categories", (n) => { render(); toast(`${n} categories imported`, "ok"); }));
-    document.getElementById("gsheet").addEventListener("click", () => { download("categories-google-sheet.csv", toCSV(EXPORT.Categories.headers, EXPORT.Categories.rows()), "text/csv"); toast("Exported a Google-Sheets-ready CSV", "ok"); });
     render();
   }
 
@@ -709,7 +704,7 @@
       <div id="list"></div>`;
     const fillCat = () => { document.getElementById("cat").innerHTML = `<option value="">Select Category</option>` + cats().map((c) => `<option value="${attr(c)}" ${c === state.category ? "selected" : ""}>${esc(c)}</option>`).join(""); };
     function filtered() { const q = state.search.trim().toLowerCase(); return SEED.rawMaterials.filter((r) => { if (state.category && r.category !== state.category) return false; if (!q) return true; return r.name.toLowerCase().includes(q) || String(r.articleNo).toLowerCase().includes(q); }); }
-    function rmForm(r) { r = r || {}; return [dRow("Article No", false, `<div class="with-btn"><input name="articleNo" value="${attr(r.articleNo || "")}" placeholder="Article No"><button type="button" class="btn btn-primary" data-generate="articleNo" style="height:44px">Generate</button></div>`), dRow("Title/Name", true, `<input name="name" value="${attr(r.name || "")}" placeholder="Title/Name" required>`), dRow("Description", false, `<textarea name="description" placeholder="Description">${esc(r.description || "")}</textarea>`), dRow("Images", false, imgGrid), dRow("HSN/SAC", false, `<input name="hsn" value="${attr(r.hsn || "")}" placeholder="HSN/SAC">`), dRow("Barcode", false, `<div class="with-btn"><input name="barcode" value="${attr(r.barcode || "")}" placeholder="Barcode"><button type="button" class="btn btn-primary" data-scan="barcode" style="height:44px;width:48px;padding:0;justify-content:center">${I.scan}</button></div>`), dRow("Category", true, `<select name="category"><option value="">Select Category</option><option ${r.category === "Raw Material" ? "selected" : ""}>Raw Material</option><option ${r.category === "Packaging" ? "selected" : ""}>Packaging</option>${subcatOptions(r.category)}</select>`), dRow("Unit &amp; Price", true, `<button type="button" class="unit-price-btn">Select Unit &amp; Price</button>`), dRow("Unit", false, `<select name="unit">${unitOpts(r.unit || "KG")}</select>`), dRow("Purchasing Price", true, `<input name="price" type="number" min="0" step="0.01" value="${attr(r.purchasingPrice != null ? r.purchasingPrice : "")}" placeholder="0" required>`), dRow("Opening Stock", false, `<input name="stockTotal" type="number" min="0" value="${attr(r.stockTotal != null ? r.stockTotal : "")}" placeholder="0">`), `<input type="hidden" name="baseUnit"><input type="hidden" name="conversionQty"><input type="hidden" name="gst" value="${attr(r.taxRate || 0)}">`].join(""); }
+    function rmForm(r) { r = r || {}; return [dRow("Article No", false, `<div class="with-btn"><input name="articleNo" value="${attr(r.articleNo || "")}" placeholder="Article No"><button type="button" class="btn btn-primary" data-generate="articleNo" style="height:44px">Generate</button></div>`), dRow("Title/Name", true, `<input name="name" value="${attr(r.name || "")}" placeholder="Title/Name" required>`), dRow("Description", false, `<textarea name="description" placeholder="Description">${esc(r.description || "")}</textarea>`), dRow("Images", false, imgGrid), dRow("HSN/SAC", false, `<input name="hsn" value="${attr(r.hsn || "")}" placeholder="HSN/SAC">`), dRow("Barcode", false, `<input name="barcode" value="${attr(r.barcode || "")}" placeholder="Barcode">`), dRow("Category", true, `<select name="category"><option value="">Select Category</option><option ${r.category === "Raw Material" ? "selected" : ""}>Raw Material</option><option ${r.category === "Packaging" ? "selected" : ""}>Packaging</option>${subcatOptions(r.category)}</select>`), dRow("Unit &amp; Price", true, `<button type="button" class="unit-price-btn">Select Unit &amp; Price</button>`), dRow("Unit", false, `<select name="unit">${unitOpts(r.unit || "KG")}</select>`), dRow("Purchasing Price", true, `<input name="price" type="number" min="0" step="0.01" value="${attr(r.purchasingPrice != null ? r.purchasingPrice : "")}" placeholder="0" required>`), dRow("Opening Stock", false, `<input name="stockTotal" type="number" min="0" value="${attr(r.stockTotal != null ? r.stockTotal : "")}" placeholder="0">`), `<input type="hidden" name="baseUnit"><input type="hidden" name="conversionQty"><input type="hidden" name="gst" value="${attr(r.taxRate || 0)}">`].join(""); }
     function openAdd() { drawer({ title: "Add Raw Material", subtitle: "Add your raw material and necessary information from here", saveLabel: "Add Raw Material", body: rmForm(), onSave: (f) => { if (!f.name.value.trim() || !f.price.value) { toast("Title and purchasing price are required.", "err"); return false; } SEED.rawMaterials.unshift({ id: "rm-" + Date.now(), name: f.name.value.trim(), articleNo: f.articleNo.value.trim() || "RM" + Math.floor(Math.random() * 9000 + 1000), category: f.category.value || "Raw Material", img: "raw,material", purchasingPrice: +f.price.value, taxRate: 0, unit: f.unit.value, stockTotal: +f.stockTotal.value || 0 }); state.page = 1; fillCat(); render(); toast(`"${f.name.value.trim()}" added`, "ok"); } }); }
     function openEdit(r) { drawer({ title: "Update Raw Material", subtitle: r.name, saveLabel: "Update Raw Material", body: rmForm(r), onSave: (f) => { if (!f.name.value.trim() || !f.price.value) { toast("Title and purchasing price are required.", "err"); return false; } Object.assign(r, { name: f.name.value.trim(), articleNo: f.articleNo.value.trim(), category: f.category.value || r.category, purchasingPrice: +f.price.value, unit: f.unit.value, stockTotal: +f.stockTotal.value || 0 }); fillCat(); render(); toast("Raw material updated", "ok"); } }); }
     function bulkMenu(anchor) {
