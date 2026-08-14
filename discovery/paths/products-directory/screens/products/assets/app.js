@@ -79,6 +79,20 @@
 
   function toast(msg, tone) { const t = document.getElementById("toast"); if (!t) return; t.className = "toast show" + (tone ? " " + tone : ""); t.textContent = msg; clearTimeout(toast._t); toast._t = setTimeout(() => (t.className = "toast"), 2600); }
 
+  // ── Full-screen overlay signal ────────────────────────────────────────────
+  // A drawer / centered modal should cover the WHOLE page. When embedded in the
+  // mock platform, the platform paints its own 56px header over the top of this
+  // iframe, which a drawer inside the iframe cannot paint over. So we tell the
+  // platform (postMessage) to hide that header while any overlay is open. It is
+  // ref-counted so stacked overlays (e.g. drawer → confirm) behave correctly.
+  const EMBEDDED = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+  let _overlayCount = 0;
+  function setOverlay(on) {
+    _overlayCount = Math.max(0, _overlayCount + (on ? 1 : -1));
+    if (!EMBEDDED) return;
+    try { window.parent.postMessage({ source: "fb-module", type: "overlay", active: _overlayCount > 0 }, "*"); } catch (e) {}
+  }
+
   // ── File / CSV helpers ────────────────────────────────────────────────────
   function download(filename, text, mime) { const blob = new Blob([text], { type: mime || "text/plain" }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1500); }
   function toCSV(headers, rows) { const q = (v) => { v = String(v == null ? "" : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }; return [headers.map(q).join(","), ...rows.map((r) => r.map(q).join(","))].join("\r\n"); }
@@ -147,9 +161,10 @@
     scrim.innerHTML = `<div class="modal-panel ${wide ? "wide" : ""} ${panelClass || ""}" role="dialog" aria-modal="true">
       <div class="mp-head"><h3>${esc(title)}</h3>${headExtra || ""}<button class="x" data-close>${I.x}</button></div>
       <div class="mp-body">${body}</div>${footer ? `<div class="mp-foot">${footer}</div>` : ""}</div>`;
-    document.body.appendChild(scrim);
+    document.body.appendChild(scrim); setOverlay(true);
     requestAnimationFrame(() => scrim.classList.add("show"));
-    const close = () => { scrim.classList.remove("show"); setTimeout(() => scrim.remove(), 200); };
+    let done = false;
+    const close = () => { if (done) return; done = true; setOverlay(false); scrim.classList.remove("show"); setTimeout(() => scrim.remove(), 200); };
     scrim.addEventListener("click", (e) => { if (e.target === scrim) close(); });
     scrim.querySelectorAll("[data-close]").forEach((b) => b.addEventListener("click", close));
     return { scrim, panel: scrim.querySelector(".modal-panel"), close };
@@ -166,9 +181,10 @@
     scrim.innerHTML = `<div class="modal-card" role="dialog" aria-modal="true"><div class="modal-ic">${I.trashBig}</div>
       <h2>Delete${bulk ? "" : ` <span class="em">${esc(name)}</span>`}?</h2><p>${msg}</p>
       <div class="modal-foot"><button class="btn" data-keep style="border-color:var(--line)">Cancel</button><button class="btn btn-danger" data-del>Delete</button></div></div>`;
-    document.body.appendChild(scrim);
+    document.body.appendChild(scrim); setOverlay(true);
     requestAnimationFrame(() => scrim.classList.add("show"));
-    const close = () => { scrim.classList.remove("show"); setTimeout(() => scrim.remove(), 200); };
+    let done = false;
+    const close = () => { if (done) return; done = true; setOverlay(false); scrim.classList.remove("show"); setTimeout(() => scrim.remove(), 200); };
     scrim.addEventListener("click", (e) => { if (e.target === scrim) close(); });
     scrim.querySelector("[data-keep]").addEventListener("click", close);
     scrim.querySelector("[data-del]").addEventListener("click", () => { onConfirm(); close(); });
@@ -182,9 +198,10 @@
       <div class="drawer-head"><button class="x">${I.x}</button><h3>${esc(title)}</h3>${subtitle ? `<p>${esc(subtitle)}</p>` : ""}</div>
       <div class="drawer-body"><form id="drawerForm">${body}</form></div>
       <div class="drawer-foot"><button type="button" class="btn btn-primary" data-save>${esc(saveLabel)}</button><button type="button" class="btn cancel" data-close>Cancel</button></div>`;
-    document.body.appendChild(scrim); document.body.appendChild(panel);
+    document.body.appendChild(scrim); document.body.appendChild(panel); setOverlay(true);
     requestAnimationFrame(() => { scrim.classList.add("show"); panel.classList.add("open"); });
-    const close = () => { scrim.classList.remove("show"); panel.classList.remove("open"); setTimeout(() => { scrim.remove(); panel.remove(); document.removeEventListener("keydown", onKey); }, 280); };
+    let done = false;
+    const close = () => { if (done) return; done = true; setOverlay(false); scrim.classList.remove("show"); panel.classList.remove("open"); setTimeout(() => { scrim.remove(); panel.remove(); document.removeEventListener("keydown", onKey); }, 280); };
     const onKey = (e) => { if (e.key === "Escape") close(); };
     document.addEventListener("keydown", onKey);
     scrim.addEventListener("click", close);
@@ -419,7 +436,7 @@
     }).join("");
     return `<div class="scrim" id="scrim"></div>
       <aside class="sidebar" id="sidebar"><div class="brand"><span class="logo">${I.bag}</span><span class="name">Murli</span></div><nav class="nav">${nav}</nav></aside>
-      <div class="main"><div class="topbar"><button class="hamburger" id="hamburger">${I.menu}</button><div class="page-title">${esc(title)}</div><div class="spacer"></div><div class="user"><div class="who"><b>Mahesh</b><br><small>Admin</small></div><div class="av">${I.user}</div></div></div><div class="content" id="content"></div></div>
+      <div class="main"><div class="topbar"><button class="hamburger" id="hamburger">${I.menu}</button><span class="topbar-brand">${I.bag}</span><div class="page-title">${esc(title)}</div><div class="spacer"></div><div class="user"><div class="who"><b>Mahesh</b><br><small>Admin</small></div><div class="av">${I.user}</div></div></div><div class="content" id="content"></div></div>
       <div class="toast" id="toast"></div>`;
   }
   function wireShell() {
@@ -452,16 +469,19 @@
     const subcats = () => [...new Set(SEED.products.map((p) => p.category))];
     const content = document.getElementById("content");
     content.innerHTML = `
+      ${pageHead("products")}
       <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><button class="btn" id="bulk">${I.bulk} Bulk Action <span class="caret">${I.chev}</span></button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Product</button></div>
-      <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search Product"></div><select class="filter desktop-filter" id="cat"></select></div>
-      <div class="chips" id="chips"></div><div id="list"></div>`;
+      <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search Finished Goods"></div><select class="filter desktop-filter" id="cat"></select></div>
+      <div class="chips chip-scroll" id="chips"></div><div id="list"></div>`;
 
     const fillCat = () => { document.getElementById("cat").innerHTML = `<option value="">Select Category</option>` + subcats().map((c) => `<option value="${attr(c)}" ${c === state.category ? "selected" : ""}>${esc(c)}</option>`).join(""); };
     function fillChips() {
-      document.getElementById("chips").innerHTML = `<button class="chip-pill ${state.tag === "all" ? "active" : ""}" data-t="all">All</button><button class="chip-pill ${state.tag === "high" ? "active" : ""}" data-t="high">${I.tag} High margin <span class="num">${highCount()}</span></button>`;
-      document.getElementById("chips").querySelectorAll(".chip-pill").forEach((c) => c.addEventListener("click", () => { state.tag = c.dataset.t; state.page = 1; render(); }));
+      const chips = document.getElementById("chips"); if (!chips) return;
+      chips.innerHTML = `<button class="chip-pill ${!state.category ? "active" : ""}" data-c="">All</button>` +
+        subcats().map((c) => `<button class="chip-pill ${state.category === c ? "active" : ""}" data-c="${attr(c)}">${esc(c)}</button>`).join("");
+      chips.querySelectorAll(".chip-pill").forEach((el) => el.addEventListener("click", () => { state.category = el.dataset.c; state.page = 1; const sel = document.getElementById("cat"); if (sel) sel.value = state.category; render(); }));
     }
-    function filtered() { const q = state.search.trim().toLowerCase(); return SEED.products.filter((p) => { if (state.category && p.category !== state.category) return false; if (state.tag === "high" && !p.highMargin) return false; if (!q) return true; return p.name.toLowerCase().includes(q) || String(p.articleNo).toLowerCase().includes(q); }); }
+    function filtered() { const q = state.search.trim().toLowerCase(); return SEED.products.filter((p) => { if (state.category && p.category !== state.category) return false; if (!q) return true; return p.name.toLowerCase().includes(q) || String(p.articleNo).toLowerCase().includes(q); }); }
     const topOf = (catName) => SEED.categories.find((c) => (c.children || []).some((k) => k.name === catName)) || SEED.categories.find((c) => c.name === catName);
     function productForm(p) {
       p = p || {};
@@ -581,7 +601,7 @@
       if (!document.getElementById("chips")) { screenProducts(); return; }
       const rows = filtered(); const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE)); if (state.page > pages) state.page = pages;
       const slice = rows.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
-      document.getElementById("chips").querySelectorAll(".chip-pill").forEach((c) => c.classList.toggle("active", c.dataset.t === state.tag));
+      fillChips();
       const list = document.getElementById("list");
       if (rows.length === 0) { list.innerHTML = emptyBlock("No products found", "Try another search term or clear the filters."); return; }
       const allChecked = slice.length && slice.every((p) => state.selected.has(p.id));
@@ -639,6 +659,7 @@
     const state = { search: "", showChild: false, page: 1, expanded: new Set() };
     const content = document.getElementById("content");
     content.innerHTML = `
+      ${pageHead("categories")}
       <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Category</button></div>
       <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search by Category name"></div><label class="toggle-wrap"><span class="switch ${state.showChild ? "on" : ""}" id="sw"></span> Show subcategories</label></div>
       <div id="list"></div>`;
@@ -704,10 +725,17 @@
     const cats = () => [...new Set(SEED.rawMaterials.map((r) => r.category))];
     const content = document.getElementById("content");
     content.innerHTML = `
+      ${pageHead("raw-materials")}
       <div class="toolbar"><button class="btn" id="export">${I.upload} Export</button><button class="btn" id="import">${I.download} Import</button><button class="btn" id="bulk">${I.bulk} Bulk Action <span class="caret">${I.chev}</span></button><div class="grow"></div><button class="btn btn-primary" id="add">${I.plus} Add Raw Material</button></div>
       <div class="filters"><div class="search">${I.search}<input id="q" type="search" placeholder="Search Raw Material"></div><select class="filter desktop-filter" id="cat"></select></div>
-      <div id="list"></div>`;
+      <div class="chips chip-scroll" id="chips"></div><div id="list"></div>`;
     const fillCat = () => { document.getElementById("cat").innerHTML = `<option value="">Select Category</option>` + cats().map((c) => `<option value="${attr(c)}" ${c === state.category ? "selected" : ""}>${esc(c)}</option>`).join(""); };
+    function fillChips() {
+      const chips = document.getElementById("chips"); if (!chips) return;
+      chips.innerHTML = `<button class="chip-pill ${!state.category ? "active" : ""}" data-c="">All</button>` +
+        cats().map((c) => `<button class="chip-pill ${state.category === c ? "active" : ""}" data-c="${attr(c)}">${esc(c)}</button>`).join("");
+      chips.querySelectorAll(".chip-pill").forEach((el) => el.addEventListener("click", () => { state.category = el.dataset.c; state.page = 1; const sel = document.getElementById("cat"); if (sel) sel.value = state.category; render(); }));
+    }
     function filtered() { const q = state.search.trim().toLowerCase(); return SEED.rawMaterials.filter((r) => { if (state.category && r.category !== state.category) return false; if (!q) return true; return r.name.toLowerCase().includes(q) || String(r.articleNo).toLowerCase().includes(q); }); }
     function rmForm(r) { r = r || {}; return [dRow("Article No", false, `<div class="with-btn"><input name="articleNo" value="${attr(r.articleNo || "")}" placeholder="Article No"><button type="button" class="btn btn-primary" data-generate="articleNo" style="height:44px">Generate</button></div>`), dRow("Title/Name", true, `<input name="name" value="${attr(r.name || "")}" placeholder="Title/Name" required>`), dRow("Description", false, `<textarea name="description" placeholder="Description">${esc(r.description || "")}</textarea>`), dRow("Images", false, imgGrid), dRow("HSN/SAC", false, `<input name="hsn" value="${attr(r.hsn || "")}" placeholder="HSN/SAC">`), dRow("Barcode", false, `<input name="barcode" value="${attr(r.barcode || "")}" placeholder="Barcode">`), dRow("Category", true, `<select name="category"><option value="">Select Category</option><option ${r.category === "Raw Material" ? "selected" : ""}>Raw Material</option><option ${r.category === "Packaging" ? "selected" : ""}>Packaging</option>${subcatOptions(r.category)}</select>`), dRow("Unit &amp; Price", true, `<button type="button" class="unit-price-btn">Select Unit &amp; Price</button>`), dRow("Unit", false, `<select name="unit">${unitOpts(r.unit || "KG")}</select>`), dRow("Purchasing Price", true, `<input name="price" type="number" min="0" step="0.01" value="${attr(r.purchasingPrice != null ? r.purchasingPrice : "")}" placeholder="0" required>`), dRow("Opening Stock", false, `<input name="stockTotal" type="number" min="0" value="${attr(r.stockTotal != null ? r.stockTotal : "")}" placeholder="0">`), `<input type="hidden" name="baseUnit"><input type="hidden" name="conversionQty"><input type="hidden" name="gst" value="${attr(r.taxRate || 0)}">`].join(""); }
     function openAdd() { drawer({ title: "Add Raw Material", subtitle: "Add your raw material and necessary information from here", saveLabel: "Add Raw Material", body: rmForm(), onSave: (f) => { if (!f.name.value.trim() || !f.price.value) { toast("Title and purchasing price are required.", "err"); return false; } SEED.rawMaterials.unshift({ id: "rm-" + Date.now(), name: f.name.value.trim(), articleNo: f.articleNo.value.trim() || "RM" + Math.floor(Math.random() * 9000 + 1000), category: f.category.value || "Raw Material", img: "raw,material", purchasingPrice: +f.price.value, taxRate: 0, unit: f.unit.value, stockTotal: +f.stockTotal.value || 0 }); state.page = 1; fillCat(); render(); toast(`"${f.name.value.trim()}" added`, "ok"); } }); }
@@ -723,6 +751,7 @@
     function render() {
       const rows = filtered(); const pages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE)); if (state.page > pages) state.page = pages;
       const slice = rows.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+      fillChips();
       const list = document.getElementById("list");
       if (rows.length === 0) { list.innerHTML = emptyBlock("No raw materials found", "Try another search term or clear the filters."); return; }
       const allChecked = slice.length && slice.every((r) => state.selected.has(r.id));
@@ -772,6 +801,7 @@
     const state = { search: "", tab: "all", tag: "", selected: new Set() };
     const content = document.getElementById("content");
     content.innerHTML = `
+      ${pageHead("image-directory")}
       <div class="gallery-toolbar">
         <div class="search">${I.search}<input id="q" type="search" placeholder="Search by name, category, article number or tag"></div>
         <button class="btn btn-primary" id="addImg">${I.imgph} Add images <span class="caret" style="color:rgba(255,255,255,.7)">${I.chev}</span></button>
@@ -1081,6 +1111,16 @@
     render();
   }
 
-  const TITLES = { products: "All Products", categories: "Categories", "raw-materials": "Raw Materials", "image-directory": "Image-directory" };
+  // Screen identity: mobile page heading (icon + title) + desktop topbar title.
+  // Names match the live app exactly (see attached screens).
+  const SCREEN_META = {
+    products: { icon: I.box, title: "Finished Goods" },
+    categories: { icon: I.box, title: "Product Categories" },
+    "raw-materials": { icon: I.box, title: "Raw Materials" },
+    "image-directory": { icon: I.box, title: "Image Gallery" },
+  };
+  const TITLES = Object.fromEntries(Object.entries(SCREEN_META).map(([k, v]) => [k, v.title]));
+  // In-content page heading — the signature green icon + title shown on mobile.
+  const pageHead = (key) => `<div class="page-head"><span class="ph-ic">${SCREEN_META[key].icon}</span><h1>${esc(SCREEN_META[key].title)}</h1></div>`;
   window.FB = { mount(screen) { document.getElementById("app").innerHTML = shell(screen, TITLES[screen]); wireShell(); if (screen === "products") screenProducts(); else if (screen === "categories") screenCategories(); else if (screen === "raw-materials") screenRawMaterials(); else if (screen === "image-directory") screenImageDirectory(); } };
 })();
