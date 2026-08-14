@@ -205,7 +205,7 @@
     }).join("");
     return `<div class="scrim" id="scrim"></div>
       <aside class="sidebar" id="sidebar"><div class="brand"><span class="logo">${I.bag}</span><span class="name">Murli</span></div><nav class="nav">${nav}</nav></aside>
-      <div class="main"><div class="topbar"><button class="hamburger" id="hamburger">${I.menu}</button><span class="topbar-brand">${I.bag}</span><div class="page-title">${esc(title)}</div><div class="spacer"></div><div class="user"><div class="who"><b>Mahesh</b><br><small>Admin</small></div><div class="av">${I.user}</div></div></div><div class="content" id="content"></div></div>
+      <div class="main"><div class="topbar"><span class="topbar-brand">${I.bag}</span><div class="page-title">${esc(title)}</div><div class="spacer"></div><div class="user"><div class="who"><b>Mahesh</b><br><small>Admin</small></div><div class="av">${I.user}</div></div></div><div class="content" id="content"></div></div>
       <div class="toast" id="toast"></div>`;
   }
   function wireShell() {
@@ -258,8 +258,8 @@
       const cards = slice.map((c) => `<div class="clcard" data-id="${c.id}">
         <div class="cl-top"><span class="icheckwrap"><input class="checkbox row-check" type="checkbox" data-id="${c.id}" ${state.selected.has(c.id) ? "checked" : ""}></span>
           <div class="cl-main"><div class="cl-name">${I.tag}<b>${esc(c.name)}</b></div><div class="cl-mod">Modified ${esc(c.lastModified)}</div></div></div>
-        <div class="cl-stats"><div class="st">${I.users}<b>${c.customerCount}</b><span>Customers</span></div><div class="st">${I.pkg}<b>${c.productCount}</b><span>Products</span></div>
-          <div class="cl-acts"><button class="icon-btn" data-act="edit" data-id="${c.id}">${I.edit}</button><button class="icon-btn danger" data-act="del" data-id="${c.id}">${I.trash}</button><button class="icon-btn send" data-act="send" data-id="${c.id}">${I.send}</button><button class="icon-btn" data-act="import" data-id="${c.id}">${I.upload}</button><button class="icon-btn" data-act="export" data-id="${c.id}">${I.download}</button></div></div>
+        <div class="cl-stats"><div class="st">${I.users}<b>${c.customerCount}</b><span>Customers</span></div><div class="st">${I.pkg}<b>${c.productCount}</b><span>Products</span></div></div>
+        <div class="cl-actbar"><button class="icon-btn" data-act="edit" data-id="${c.id}" title="Edit">${I.edit}</button><button class="icon-btn danger" data-act="del" data-id="${c.id}" title="Delete">${I.trash}</button><button class="icon-btn send" data-act="send" data-id="${c.id}" title="Send Campaign Links">${I.send}</button><button class="icon-btn" data-act="import" data-id="${c.id}" title="Import">${I.upload}</button><button class="icon-btn" data-act="export" data-id="${c.id}" title="Export">${I.download}</button></div>
       </div>`).join("");
       list.innerHTML = `<div class="table-wrap desktop-only"><div class="table-scroll"><table class="grid catalog-grid"><thead><tr><th><input class="checkbox" id="selall" type="checkbox" ${allChecked ? "checked" : ""}></th><th>Name</th><th>Description</th><th>Customers</th><th>Products</th><th>Last Modified</th><th style="text-align:right">Actions</th><th style="text-align:center">Import/Export</th></tr></thead><tbody>${tbody}</tbody></table><div class="pagerslot"></div></div></div><div class="cards">${cards}</div>`;
       const s = list.querySelector(".pagerslot"); if (s) s.replaceWith(pager(rows.length, state.page, (p) => { state.page = p; render(); }));
@@ -651,15 +651,41 @@
      Import — "Preview Catalogue Pricing CSV" with an inline-editable Catalog
      Price column (Edit ↔ Cancel Edit; Import applies the previewed prices).
      ========================================================================= */
+  // Read an uploaded CSV or (HTML-based) Excel export into rows of cells.
+  function parseHTMLTable(text) {
+    try { const doc = new DOMParser().parseFromString(text, "text/html"); return [].slice.call(doc.querySelectorAll("tr")).map((tr) => [].slice.call(tr.querySelectorAll("td,th")).map((td) => td.textContent.trim())); } catch (e) { return []; }
+  }
+  function readImportFile(file, cb) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = String(reader.result || "");
+      let table = /<table[\s>]/i.test(text) ? parseHTMLTable(text) : parseCSV(text);
+      table = (table || []).filter((r) => r.some((x) => String(x).trim() !== ""));
+      if (!table.length) { toast("Couldn't read that file — upload a CSV or the exported Excel.", "err"); return; }
+      const first = table[0].map((x) => String(x).toLowerCase());
+      const hasHeader = first.includes("product") || first.includes("article no") || first.includes("catalog price") || first.includes("base price");
+      const data = hasHeader ? table.slice(1) : table;
+      const rows = data.map((r) => { const art = String(r[0] || "").trim(); const p = SEED.products.find((x) => String(x.articleNo) === art) || null; return { id: p ? p.id : null, articleNo: art, name: r[1] || (p ? p.name : art), base: r[2] !== undefined && String(r[2]).trim() !== "" ? (+r[2] || 0) : (p ? p.price : 0), unit: r[3] || (p ? p.unit : ""), catalog: +r[4] || (+r[2] || 0) }; });
+      cb(rows, file.name);
+    };
+    reader.readAsText(file);
+  }
+  // Row "Import" → pick a CSV/Excel file first, then preview it (editable).
   function openImportPreview(catalog, onDone) {
-    // Preview rows: start from the catalog's own pricing (as the real app does
-    // when it previews a pricing CSV before import). A CSV can be loaded to
-    // replace them.
-    let rows = catalogPriceRows(catalog).map((r) => ({ id: r.id, articleNo: r.articleNo, name: r.name, base: r.base, unit: r.unit, catalog: r.catalog }));
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.xls,.xlsx,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    input.style.display = "none";
+    document.body.appendChild(input);
+    input.addEventListener("change", () => { const f = input.files[0]; input.remove(); if (!f) return; readImportFile(f, (rows) => showImportPreview(catalog, rows, onDone)); });
+    input.click();
+  }
+  function showImportPreview(catalog, initialRows, onDone) {
+    let rows = initialRows;
     let editing = false;
     const m = modal({ title: "Preview Catalogue Pricing CSV", panelClass: "import-modal", wide: true,
       headExtra: `<button class="import-edit" id="impEdit">${I.edit} <span>Edit</span></button>`,
-      body: `<div class="import-picker"><input type="file" id="impFile" accept=".csv,text/csv" hidden><button class="linklike" id="impBrowse">Load a CSV to replace the preview</button></div><div id="impTable"></div>`,
+      body: `<div id="impTable"></div>`,
       footer: `<button class="btn" data-close style="border-color:var(--line)">Cancel</button><button class="btn import-primary" id="impPrimary">Import</button>` });
     const editBtn = m.panel.querySelector("#impEdit"), primary = m.panel.querySelector("#impPrimary"), tableEl = m.panel.querySelector("#impTable");
     const draw = () => {
@@ -682,21 +708,6 @@
       rows.forEach((r) => { if (r.id) catalog.pricing[r.id] = r.catalog; });
       catalog.lastModified = new Date().toLocaleDateString("en-GB");
       m.close(); onDone && onDone(); toast(`Imported pricing for "${catalog.name}"`, "ok");
-    });
-    const fileInput = m.panel.querySelector("#impFile");
-    m.panel.querySelector("#impBrowse").addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const parsed = parseCSV(String(reader.result)); if (!parsed.length) { toast("Empty file", "err"); return; }
-        const first = parsed[0].map((x) => String(x).toLowerCase());
-        const hasHeader = first.includes("product") || first.includes("article no") || first.includes("catalog price");
-        const data = hasHeader ? parsed.slice(1) : parsed;
-        rows = data.map((r) => { const art = String(r[0] || "").trim(); const p = SEED.products.find((x) => String(x.articleNo) === art) || null; return { id: p ? p.id : null, articleNo: art, name: r[1] || (p ? p.name : art), base: p ? p.price : (+r[2] || 0), unit: r[3] || (p ? p.unit : ""), catalog: +r[4] || (+r[2] || 0) }; });
-        draw(); toast(`Loaded ${rows.length} rows from ${file.name}`, "ok");
-      };
-      reader.readAsText(file);
     });
     draw();
   }
